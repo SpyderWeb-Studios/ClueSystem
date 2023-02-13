@@ -4,8 +4,8 @@ This is a plugin designed to make creating clue systems a lot easier and simpler
 
 When you download this plugin, you need to extract it in the Plugins folder of your project: 
  - ProjectFolder
-  - Plugins
-    - ClueSystem
+    - Plugins
+        - ClueSystem
     
 If you have no Plugins folder, then simply add one
 
