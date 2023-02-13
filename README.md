@@ -40,6 +40,11 @@ Alternatively, you may want it to easily compare meshes in the world and only ha
 
 ![image](https://user-images.githubusercontent.com/50571566/218344918-6d2856f9-2f4f-4035-ba26-a19e5af7e2aa.png)
 
+To actually pickup the Clue, there is a Blueprint Callable function that can be used: 
+![image](https://user-images.githubusercontent.com/50571566/218345980-bd091199-28de-4ddb-a4ec-4df99d6d1c66.png)
+
+I'm using it with an interface that I'm using in my main project
+
 ## CBP_ClueInspector
 
 This Blueprint handles the inspection of the Clue. The Scene Capture is connected to a Render Texture which is then put on the UI
@@ -123,5 +128,3 @@ The Widget that handles viewing the Clue is the CWB_ClueViewer.
 When you select a clue to view from the Crew List Manager, this will update the clue to view. 
 The Text on the right will update itself to hold the base description of the Clue. 
 It will also create new widgets based on if the clue has additional information that is reliant on the player collecting other clues, so you can build a web of clues and information really easily.
-
-
