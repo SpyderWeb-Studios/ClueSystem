@@ -43,7 +43,7 @@ void UClueSlot::OnDataLoaded(UPrimaryDataAsset_Clue* Clue)
 	if(Clue)
 	{
 		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid", EDebuggingType::DT_Log);
-		if(Clue->GetDoesUseMesh()) GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(Clue);
-		else GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueImageLoaded.Broadcast(Clue->GetClueImage());
+		GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(Clue);
+		
 	}
 }

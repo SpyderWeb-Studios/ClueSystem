@@ -20,30 +20,42 @@ public:
 	UPrimaryDataAsset_Clue();
 
 #pragma region Getters
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FString GetClueName(){return ClueName;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FString GetClueInformation(){return ClueInformation;}
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int GetClueIndex() const {return ClueIndex;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	EClueLocation GetClueLocation() const {return ClueLocation;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	TArray<FAdditionalClueInfo> GetAdditionalInformation(){return AdditionalInformation;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UStaticMesh* GetClueStaticMesh() const {return ClueMesh;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FRotator GetDefaultRotation() const {return DefaultRotation;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetCameraOffset() const {return CameraLocationOffset;}
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetCameraDistance() const {return CameraDistance;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetDoesUseMesh() const{return bUsesMesh;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	TSoftObjectPtr<UTexture2D> GetClueImage() const {return ClueImage;}
-	
-	TObjectPtr<UTexture2D> GetClueIcon() const {return ClueIcon;}
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UTexture2D* GetClueIcon() const {return ClueIcon;}
 
 #pragma endregion 
 
