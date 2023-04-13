@@ -75,8 +75,8 @@ protected:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
     FString ClueInformation;
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
-	int ClueIndex;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category="Setup")
+	int ClueIndex = -1;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
 	FString ClueLocation;

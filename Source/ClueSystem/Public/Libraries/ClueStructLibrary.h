@@ -38,32 +38,61 @@ struct FClueTreeNode
 {
 	GENERATED_BODY()
 
+	// Needs
+	// - Node ID
+	// - Children Nodes (Array of Clue Config Data Assets)
+
 	FClueTreeNode()
 	{
 		NodeID = -1;
 	}
 
-	FClueTreeNode(int Node, TSoftObjectPtr<UPrimaryDataAsset_Clue> Clue, TArray<TSoftObjectPtr<UPrimaryDataAsset_ClueConfig>> Branches)
+	FClueTreeNode(int ID)
 	{
-		NodeID = Node;
-		ClueDataPoint = Clue;
-		this->Branches = Branches;
+		NodeID = ID;
 	}
 
-	FClueTreeNode(int Node, UPrimaryDataAsset_Clue* Clue)
+	FClueTreeNode(int ID, TArray<UPrimaryDataAsset_ClueConfig*> Children)
 	{
-		NodeID = Node;
-		ClueDataPoint = Clue;
+		NodeID = ID;
+		ChildrenNodes = Children;
+	}
+
+	FClueTreeNode(int ID, TArray<UPrimaryDataAsset_Clue*> ClueList)
+	{
+		NodeID = ID;
+		Clues = ClueList;
+	}
+
+	FClueTreeNode(int ID, TArray<UPrimaryDataAsset_ClueConfig*> Children, TArray<UPrimaryDataAsset_Clue*> ClueList)
+	{
+		NodeID = ID;
+		ChildrenNodes = Children;
+		Clues = ClueList;
+	}
+
+	FClueTreeNode(int ID, TObjectPtr<UPrimaryDataAsset_ClueConfig> Child)
+	{
+		NodeID = ID;
+		ChildrenNodes.Add(Child);
 	}
 	
-	UPROPERTY(BlueprintReadOnly)
+	FClueTreeNode(int ID, TObjectPtr<UPrimaryDataAsset_Clue> Clue)
+	{
+		NodeID = ID;
+		Clues.Add(Clue);
+	}
+
+	
+	UPROPERTY(EditDefaultsOnly)
 	int NodeID;
 
-	// The Clue that is associated with this Node
-	UPROPERTY(BlueprintReadOnly)
-	TSoftObjectPtr<UPrimaryDataAsset_Clue> ClueDataPoint;
+	UPROPERTY(EditDefaultsOnly)
+	FString NodeName;
 
-	// The Branches that are associated with this Node
-	UPROPERTY(BlueprintReadOnly)
-	TArray<TSoftObjectPtr<UPrimaryDataAsset_ClueConfig>> Branches;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<UPrimaryDataAsset_ClueConfig*> ChildrenNodes;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<UPrimaryDataAsset_Clue*> Clues;
 };

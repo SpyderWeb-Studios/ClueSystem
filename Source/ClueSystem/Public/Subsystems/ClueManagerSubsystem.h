@@ -72,5 +72,7 @@ protected:
 	// Tree Structure
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TMap<int, FClueTreeNode> ClueConfigTree;
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
 };
