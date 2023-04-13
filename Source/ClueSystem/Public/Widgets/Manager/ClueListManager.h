@@ -33,7 +33,8 @@ protected:
 
 
 	UFUNCTION()
-	void UpdateSectionSize(EClueLocation ClueLocation, int SectionSize);
-	
-	TMap<TEnumAsByte<EClueLocation>, UClueSection*> CollectedClueSections;
+	void UpdateSectionSize(const FString& ClueLocation, int SectionSize);
+
+	UPROPERTY(BlueprintReadOnly)
+	TMap<FString, UClueSection*> CollectedClueSections;
 };

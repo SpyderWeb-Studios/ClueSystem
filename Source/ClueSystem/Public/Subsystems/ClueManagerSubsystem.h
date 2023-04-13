@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Enums/EClueLocation.h"
+#include "Libraries/ClueConfig.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "Libraries/EventDelegateLibrary.h"
 
@@ -20,17 +21,22 @@ class CLUESYSTEM_API UClueManagerSubsystem : public UGameInstanceSubsystem
 
 public:
 
+	UClueManagerSubsystem();
+	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateNumberOfCluesInLocation(EClueLocation location, int Number)
+	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"))
+	void UpdateNumberOfCluesInLocation(FString location, int Number)
 	{
 		NumberOfCluesInLocations.Add(location, Number);
 		OnUpdateClueSectionSize.Broadcast(location, Number);
 	};
 
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SetClueConfigRoot(const FClueLocationConfig& Root);
+	
 	UFUNCTION()
 	void BroadcastNumberOfClues();
 
@@ -53,13 +59,18 @@ public:
 	FOnClueImageLoaded OnClueImageLoaded;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TMap<TEnumAsByte<EClueLocation>, int> NumberOfCluesInLocations;
+	TMap<FString, int> NumberOfCluesInLocations;
 	
 protected:
 
+	UPROPERTY(BlueprintReadOnly)
+	FClueLocationConfig ClueConfigRoot;
+	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TMap<TEnumAsByte<EClueLocation>, FAreaClues> CollectedClues;
+	TMap<FString, FAreaClues> CollectedClues;
 	
-	
+	// Tree Structure
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	TMap<int, FClueTreeNode> ClueConfigTree;
 	
 };

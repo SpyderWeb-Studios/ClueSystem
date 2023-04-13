@@ -31,7 +31,7 @@ public:
 	int GetClueIndex() const {return ClueIndex;}
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	EClueLocation GetClueLocation() const {return ClueLocation;}
+	FString GetClueLocation() const {return ClueLocation;}
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	TArray<FAdditionalClueInfo> GetAdditionalInformation(){return AdditionalInformation;}
@@ -61,7 +61,7 @@ public:
 
 #pragma region Setters
 	
-	void SetClueLocation(EClueLocation Location) {ClueLocation = Location;}
+	void SetClueLocation(FString Location) {ClueLocation = Location;}
 
 	void SetClueIndex(int Index) {ClueIndex = Index;}
 
@@ -79,7 +79,7 @@ protected:
 	int ClueIndex;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
-	TEnumAsByte<EClueLocation> ClueLocation;
+	FString ClueLocation;
 		
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic|Setup")
 	bool bUsesMesh;
@@ -89,7 +89,6 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TArray<FAdditionalClueInfo> AdditionalInformation;
-	
 	
 #pragma region Mesh
 	

@@ -7,6 +7,10 @@
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 
 
+UClueManagerSubsystem::UClueManagerSubsystem()
+{
+}
+
 void UClueManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -44,6 +48,12 @@ bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	OnCollectedClue.Broadcast(Clue);
 	
 	return true;
+}
+
+void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
+{
+	// Iterate through the Root and recursively add the children to the Map
+	ClueConfigRoot = Root;
 }
 
 void UClueManagerSubsystem::BroadcastNumberOfClues()

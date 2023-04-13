@@ -14,7 +14,7 @@ class AClueBase;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCollectedClue, UPrimaryDataAsset_Clue*, CollectedClue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnClueSelected, UPrimaryDataAsset_Clue*, CollectedClue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateClueLocation, FAreaClues, CollectedLocationClue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUpdateClueSectionSize, EClueLocation, ClueLocation, int, SectionSize);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUpdateClueSectionSize,const FString& , ClueLocation, int, SectionSize);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDataAssetLoaded, UPrimaryDataAsset_Clue*, Clue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnClueImageLoaded, TSoftObjectPtr<UTexture2D>, ClueImage);

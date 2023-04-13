@@ -30,11 +30,7 @@ void UClueSetupComponent::BeginPlay()
 	if(manager)
 	{
 		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Manager Valid", EDebuggingType::DT_Log);
-		for(auto clue: ClueConfig)
-		{
-			clue.UpdateClueIndices(clue.ClueLocation);
-			manager->UpdateNumberOfCluesInLocation(clue.ClueLocation, clue.Clues.Num());
-		}
+		manager->SetClueConfigRoot(ClueConfig);
 	}
 }
 

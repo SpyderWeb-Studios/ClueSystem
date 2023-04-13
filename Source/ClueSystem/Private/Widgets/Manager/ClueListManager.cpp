@@ -45,10 +45,13 @@ void UClueListManager::UpdateSlotList(UPrimaryDataAsset_Clue* CollectedClue)
 	ClueSection->UpdateSection(CollectedClue);
 }
 
-void UClueListManager::UpdateSectionSize(EClueLocation ClueLocation, int SectionSize)
+void UClueListManager::UpdateSectionSize(const FString& ClueLocation, int SectionSize)
 {
 	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Section Size: " +FString::FromInt(SectionSize), EDebuggingType::DT_Log);
 	UClueSection* section;
+	
+	
+	
 	if(!CollectedClueSections.Contains(ClueLocation))
 	{
 		section = CreateWidget<UClueSection>(GetOwningPlayer(), ClueSectionClass);
@@ -60,6 +63,7 @@ void UClueListManager::UpdateSectionSize(EClueLocation ClueLocation, int Section
 		section = CollectedClueSections[ClueLocation];
 	}
 	if(section) section->SetSectionSize(SectionSize);
+	
 }
 
 
