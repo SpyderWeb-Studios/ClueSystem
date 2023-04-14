@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PrimaryDataAsset_Clue.h"
 #include "Engine/DataAsset.h"
+#include "Libraries/EventDelegateLibrary.h"
 #include "PrimaryDataAsset_ClueConfig.generated.h"
 
 /**
@@ -33,8 +34,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetIndex(int NewIndex) { Index = NewIndex; }
-	
-	
+
+	FClueTree GetClueTree() const;
+
+
 protected:
 	
 	UPROPERTY(EditDefaultsOnly)

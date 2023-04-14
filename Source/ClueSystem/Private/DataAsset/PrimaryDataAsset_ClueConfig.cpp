@@ -3,6 +3,8 @@
 
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Subsystems/ClueManagerSubsystem.h"
 
 
 void UPrimaryDataAsset_ClueConfig::UpdateClueIndices(FString Location)
@@ -15,4 +17,12 @@ void UPrimaryDataAsset_ClueConfig::UpdateClueIndices(FString Location)
 		Clues[i]->SetClueLocation(ClueLocation);
 		
 	}
+}
+
+FClueTree UPrimaryDataAsset_ClueConfig::GetClueTree() const
+{
+	if(!IsValid(UGameplayStatics::GetGameInstance(this))) return FClueTree();
+	if(!IsValid(UGameplayStatics::GetGameInstance(this)->GetSubsystem<UClueManagerSubsystem>())) return FClueTree();
+		
+	return UGameplayStatics::GetGameInstance(this)->GetSubsystem<UClueManagerSubsystem>()->GetClueTree();
 }

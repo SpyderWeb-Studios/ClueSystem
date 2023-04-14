@@ -19,11 +19,11 @@ void UClueListManager::NativeConstruct()
 		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Manager Subsystem Valid", EDebuggingType::DT_Log);
 
 		manager->OnCollectedClue.AddUniqueDynamic(this, &UClueListManager::UpdateSlotList);
-		manager->OnUpdateClueSectionSize.AddUniqueDynamic(this, &UClueListManager::UpdateSectionSize);
-
-		manager->BroadcastNumberOfClues();
 	}
 	
+	// Load the Config Data Asset asynchonously
+	FStreamableManager Streamable;
+	Streamable.RequestAsyncLoad(ClueConfig.ToSoftObjectPath(), FStreamableDelegate::CreateUObject(this, &UClueListManager::OnConfigLoaded));
 }
 
 void UClueListManager::UpdateSlotList(UPrimaryDataAsset_Clue* CollectedClue)
@@ -49,13 +49,16 @@ void UClueListManager::UpdateSectionSize(const FString& ClueLocation, int Sectio
 {
 	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Section Size: " +FString::FromInt(SectionSize), EDebuggingType::DT_Log);
 	UClueSection* section;
-	
-	
+
+	if(SectionSize <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Section Size for location [%s] is less than or equal to 0"), *ClueLocation);
+		return;
+	}
 	
 	if(!CollectedClueSections.Contains(ClueLocation))
 	{
 		section = CreateWidget<UClueSection>(GetOwningPlayer(), ClueSectionClass);
-		GetParent()->AddChild(section);
 		CollectedClueSections.Add(ClueLocation, section);
 	}
 	else
@@ -63,7 +66,38 @@ void UClueListManager::UpdateSectionSize(const FString& ClueLocation, int Sectio
 		section = CollectedClueSections[ClueLocation];
 	}
 	if(section) section->SetSectionSize(SectionSize);
-	
 }
 
+void UClueListManager::UpdateSectionTree(const FClueTree ClueTree)
+{
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updating Section Tree", EDebuggingType::DT_Log);
+	for(const auto& section : ClueTree.ClueTreeNodes)
+	{
+		UpdateSectionSize(section.Value.NodeName, section.Value.Clues.Num());
+	}
 
+	// Iterate through the Collected Clue Sections
+	for(const auto& section : CollectedClueSections)
+	{
+		if(IsValid(section.Value))
+		{
+			UMainDebugFunctionLibrary::DebugLogWithObject(this, "Section Value [" +section.Key +"] Valid. Number of Clues ["+
+				FString::FromInt(section.Value->GetSectionSize()) +"]", EDebuggingType::DT_Log);
+			GetParent()->AddChild(section.Value);
+		}
+	}
+}
+
+void UClueListManager::OnConfigLoaded()
+{
+	// Get the Config Data Asset
+	if(UPrimaryDataAsset_ClueConfig* config = ClueConfig.Get())
+	{
+		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Config Data Asset Valid", EDebuggingType::DT_Log);
+
+		LocalClueTree.Empty();
+		GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->CreateTreeRecursively(ClueConfig.Get(), LocalClueTree);
+		
+		UpdateSectionTree(LocalClueTree);
+	}
+}

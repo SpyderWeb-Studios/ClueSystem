@@ -64,16 +64,12 @@ void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
 		UE_LOG(LogClue, Display, TEXT("Node: %d with Name: [%s]"), node.Key, *node.Value.NodeName);
 		UE_LOG(LogClue, Display, TEXT("Branches: %d"), node.Value.ChildrenNodes.Num());
 		UE_LOG(LogClue, Display, TEXT("Clues: %d"), node.Value.Clues.Num());
-	}
-}
 
-void UClueManagerSubsystem::BroadcastNumberOfClues()
-{
-	for(auto& clue : NumberOfCluesInLocations)
-	{
-		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Broadcast Clue Location", EDebuggingType::DT_Log);
-		OnUpdateClueSectionSize.Broadcast(clue.Key, clue.Value);
+		UpdateNumberOfCluesInLocation(ClueConfigTree.FindRef(GetParentIndexFromIndex(node.Value.NodeID)).NodeName, node.Value.NodeName, node.Value.Clues.Num());
 	}
+
+	OnClueTrueCreated.Broadcast(FClueTree(ClueConfigTree));
+	
 }
 
 bool UClueManagerSubsystem::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck)
@@ -89,8 +85,67 @@ bool UClueManagerSubsystem::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck
 	return false;
 }
 
+int UClueManagerSubsystem::GetNumberOfCluesInLocation(FString Location) const
+{
+	// Recursively iterate through the Tree and count the number of Clues
+
+	for(const auto& node : ClueConfigTree)
+	{
+		if(node.Value.NodeName == Location)
+		{
+			return node.Value.Clues.Num();
+		}
+	}
+
+	return 0;
+}
+
+int UClueManagerSubsystem::GetNumberOfCollectedCluesInLocation(FString Location) const
+{
+	// Recursively iterate through the Tree and count the number of Clues
+
+	if(!CollectedClues.Contains(Location)) return 0;
+	
+	return CollectedClues[Location].CollectedClues.Num();
+}
+
+int UClueManagerSubsystem::GetParentIndexFromIndex(int Index) const
+{
+	// Iterate through the Tree and find the Node with the Name
+	for(const auto& node : ClueConfigTree)
+	{
+		if(node.Value.ChildrenNodes.ContainsByPredicate([Index](const UPrimaryDataAsset_ClueConfig* Child){return Child->GetIndex() == Index;})
+			|| node.Value.Clues.ContainsByPredicate([Index](const UPrimaryDataAsset_Clue* Child){return Child->GetClueIndex() == Index;}))
+		{
+			return node.Key;
+		}
+	}
+
+	return -1;
+}
+
+int UClueManagerSubsystem::GetParentIndexFromName(FString ClueName) const
+{
+	// Iterate through the Tree and find the Node with the Name
+	for(const auto& node : ClueConfigTree)
+	{
+		if(node.Value.NodeName == ClueName)
+		{
+			return GetParentIndexFromIndex(node.Key);
+		}
+	}
+
+	return -1;
+}
+
+TMap<int, FClueTreeNode> UClueManagerSubsystem::GetClueTree() const
+{
+	return ClueConfigTree;
+}
+
+
 void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config,
-	TMap<int, FClueTreeNode>& Tree)
+                                                  TMap<int, FClueTreeNode>& Tree)
 {
 	if(!Config) return;
 	Config->SetIndex(Tree.Num());
@@ -115,7 +170,7 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 			UE_LOG(LogClue, Warning, TEXT("Clue [%s] already exists in Tree. Clue Index: [%d]"), *child->GetClueName(), child->GetClueIndex());
 		}
 		
-		FClueTreeNode ChildNode = FClueTreeNode(Tree.Num(), child);
+		FClueTreeNode ChildNode = FClueTreeNode(Tree.Num());
 		ChildNode.NodeName = child->GetClueName();
 		child->SetClueIndex(Tree.Num());
 		

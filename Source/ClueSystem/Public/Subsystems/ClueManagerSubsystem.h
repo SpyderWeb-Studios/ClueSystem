@@ -28,18 +28,16 @@ public:
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
 
 	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"))
-	void UpdateNumberOfCluesInLocation(FString location, int Number)
+	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number)
 	{
+		// Log the Parent Branch, and the location of the clue with the number of clues in that location
+		UE_LOG(LogTemp, Warning, TEXT("Parent Branch: %s, Location: %s, Number: %d"), *ParentBranch, *location, Number);
 		NumberOfCluesInLocations.Add(location, Number);
-		OnUpdateClueSectionSize.Broadcast(location, Number);
 	};
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SetClueConfigRoot(const FClueLocationConfig& Root);
 	
-	UFUNCTION()
-	void BroadcastNumberOfClues();
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck);
 	
@@ -48,18 +46,33 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnClueSelected OnClueSelected;
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnUpdateClueLocation OnUpdateLocationClues;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnUpdateClueSectionSize OnUpdateClueSectionSize;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnClueImageLoaded OnClueImageLoaded;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnUpdateClueTree OnClueTrueCreated;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TMap<FString, int> NumberOfCluesInLocations;
+
+	UFUNCTION(BlueprintPure)
+	int GetNumberOfCluesInLocation(FString Location) const;
+
+	UFUNCTION(BlueprintPure)
+	int GetNumberOfCollectedCluesInLocation(FString Location) const;
+
+	UFUNCTION(BlueprintPure)
+	int GetParentIndexFromIndex(int Index) const;
+
+	UFUNCTION(BlueprintPure)
+	int GetParentIndexFromName(FString ClueName) const;
+
+	UFUNCTION(BlueprintPure)
+	TMap<int, FClueTreeNode> GetClueTree() const;
+	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
 	
 protected:
 
@@ -73,6 +86,4 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TMap<int, FClueTreeNode> ClueConfigTree;
 
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
 };

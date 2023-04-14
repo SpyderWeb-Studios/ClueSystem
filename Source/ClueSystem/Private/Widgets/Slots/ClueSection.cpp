@@ -39,11 +39,11 @@ void UClueSection::UpdateSection(UPrimaryDataAsset_Clue* ClueDataAsset)
 
 void UClueSection::SetSectionSize(int SectionSize)
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Setting Section Size", EDebuggingType::DT_Log);
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Setting Section Size to [" +FString::FromInt(SectionSize) +"]", EDebuggingType::DT_Log);
 	
 	SectionPanel->ClearChildren();
 	SlotArray.Empty();
-	
+
 	for(int i =0 ; i< SectionSize; i++)
 	{
 		SlotArray.Add(CreateWidget<UClueSlot>(GetOwningPlayer(), ClueSlotClass));

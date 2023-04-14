@@ -35,6 +35,23 @@ protected:
 	UFUNCTION()
 	void UpdateSectionSize(const FString& ClueLocation, int SectionSize);
 
+	UFUNCTION()
+	void UpdateSectionTree(const FClueTree ClueTree);
+
 	UPROPERTY(BlueprintReadOnly)
 	TMap<FString, UClueSection*> CollectedClueSections;
+
+
+	UFUNCTION(BlueprintCallable)
+	void OnConfigLoaded();
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfig;
+
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TMap<int, FClueTreeNode> LocalClueTree;
+	
+	// Roadmap for this class
+	// - Associate a Config Data Asset with this manager to determine the order of the sections
 };

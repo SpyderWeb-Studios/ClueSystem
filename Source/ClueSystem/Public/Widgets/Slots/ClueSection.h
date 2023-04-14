@@ -23,6 +23,8 @@ public:
 
 	void SetSectionSize(int SectionSize);
 
+	int GetSectionSize() const {return SlotArray.Num();}
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
