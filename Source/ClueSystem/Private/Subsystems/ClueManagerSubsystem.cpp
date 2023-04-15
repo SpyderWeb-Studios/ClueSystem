@@ -50,6 +50,13 @@ bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	return true;
 }
 
+void UClueManagerSubsystem::UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number)
+{	
+	// Log the Parent Branch, and the location of the clue with the number of clues in that location
+	UE_LOG(LogTemp, Warning, TEXT("Parent Branch: %s, Location: %s, Number: %d"), *ParentBranch, *location, Number);
+	NumberOfCluesInLocations.Add(location, Number);
+}
+
 
 void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
 {
@@ -65,8 +72,6 @@ void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
 		UE_LOG(LogClue, Display, TEXT("Node: %d with Name: [%s]"), node.Key, *node.Value.NodeName);
 		UE_LOG(LogClue, Display, TEXT("Branches: %d"), node.Value.ChildrenNodes.Num());
 		UE_LOG(LogClue, Display, TEXT("Clues: %d"), node.Value.Clues.Num());
-
-		UpdateNumberOfCluesInLocation(ClueConfigTree.FindRef(GetParentIndexFromIndex(node.Value.NodeID)).NodeName, node.Value.NodeName, node.Value.Clues.Num());
 	}
 
 	OnClueTrueCreated.Broadcast(FClueTree(ClueConfigTree));

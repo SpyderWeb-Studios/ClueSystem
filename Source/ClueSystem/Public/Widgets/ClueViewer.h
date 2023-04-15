@@ -12,7 +12,9 @@
 #include "ClueViewer.generated.h"
 
 /**
- * 
+ * NOTE: This is a WIP Widget. This will need to be updated to handle the newer changes to the Clue System. Mainly,
+ * the Clue Data Assets will tell this Widget how to display the Clue. For example, the Clue Data Asset will tell
+ * this Widget whether to display the Clue as a 3D Mesh or as a 2D Image, or even as a audio file with a visualiser. 
  */
 UCLASS()
 class CLUESYSTEM_API UClueViewer : public UUserWidget

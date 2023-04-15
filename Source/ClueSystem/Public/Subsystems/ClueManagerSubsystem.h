@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Enums/EClueLocation.h"
 #include "Libraries/ClueConfig.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "Libraries/EventDelegateLibrary.h"
@@ -29,12 +28,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"))
-	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number)
-	{
-		// Log the Parent Branch, and the location of the clue with the number of clues in that location
-		UE_LOG(LogTemp, Warning, TEXT("Parent Branch: %s, Location: %s, Number: %d"), *ParentBranch, *location, Number);
-		NumberOfCluesInLocations.Add(location, Number);
-	};
+	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SetClueConfigRoot(const FClueLocationConfig& Root);
@@ -89,6 +83,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentName(FString ParentName, FString ClueLocation) const;
+
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly)
