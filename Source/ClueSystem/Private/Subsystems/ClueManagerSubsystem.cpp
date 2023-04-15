@@ -50,6 +50,7 @@ bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	return true;
 }
 
+
 void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
 {
 	// Iterate through the Root and recursively add the children to the Map
@@ -107,6 +108,20 @@ int UClueManagerSubsystem::GetNumberOfCollectedCluesInLocation(FString Location)
 	if(!CollectedClues.Contains(Location)) return 0;
 	
 	return CollectedClues[Location].CollectedClues.Num();
+}
+
+int UClueManagerSubsystem::GetIndexFromName(FString ClueName) const
+{
+	// Iterate through the Tree and find the Node with the Name
+	for(const auto& node : ClueConfigTree)
+	{
+		if(node.Value.NodeName == ClueName)
+		{
+			return node.Key;
+		}
+	}
+
+	return -1;
 }
 
 int UClueManagerSubsystem::GetParentIndexFromIndex(int Index) const
@@ -198,4 +213,45 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		CreateTreeRecursively(child, Tree);
 	}
 
+}
+
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromIndex(int Index) const
+{
+	if(ClueConfigTree.Contains(GetParentIndexFromIndex(Index)))
+	{
+		for(const auto& child : ClueConfigTree[GetParentIndexFromIndex(Index)].ChildrenNodes)
+		{
+			if(child->GetClueLocation() == ClueConfigTree[Index].NodeName)
+			{
+				return child;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromName(FString ClueName) const
+{
+	return GetClueConfigFromIndex(ClueConfigTree[GetIndexFromName(ClueName)].NodeID);
+}
+
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromParentIndex(int ParentIndex, FString ClueLocation) const
+{
+	// Iterate through the Tree and find the Node with the Name
+	for(const auto& node : ClueConfigTree)
+	{
+		if(node.Value.NodeName == ClueLocation)
+		{
+			return GetClueConfigFromIndex(node.Value.NodeID);
+		}
+	}
+
+	return nullptr;
+}
+
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromParentName(
+	FString ParentName, FString ClueLocation) const
+{
+	return GetClueConfigFromParentIndex(GetIndexFromName(ParentName), ClueLocation);
 }

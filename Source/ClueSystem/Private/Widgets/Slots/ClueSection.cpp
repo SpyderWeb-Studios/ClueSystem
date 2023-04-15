@@ -4,38 +4,23 @@
 #include "Widgets/Slots/ClueSection.h"
 
 #include "Components/PanelWidget.h"
-#include "DataAsset/PrimaryDataAsset_Clue.h"
+#include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 
-void UClueSection::UpdateSection(UPrimaryDataAsset_Clue* ClueDataAsset)
+
+
+void UClueSection::LoadBranch_Implementation()
 {
-
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updating Section with Data Asset", EDebuggingType::DT_Log);
-
-	if(!ClueDataAsset) return;
-	
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Data Asset is Valid: " +ClueDataAsset->GetClueName(), EDebuggingType::DT_Log);
-	
-	if(!Slots.Contains(ClueDataAsset->GetClueName()))
+	if(!SectionBranch.IsValid())
 	{
-		
-		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Slot TMap doesn't contain Clue", EDebuggingType::DT_Log);
-		
-		if(!SlotArray.IsValidIndex(ClueDataAsset->GetClueIndex()))
-		{
-			UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Index : "+ FString::FromInt(ClueDataAsset->GetClueIndex()) +" is Invalid", EDebuggingType::DT_Log);
-			return;
-		}
-		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Index is Valid", EDebuggingType::DT_Log);
-		
-		Slots.Add(ClueDataAsset->GetClueName(), SlotArray[ClueDataAsset->GetClueIndex()]);
-		
+		UE_LOG(LogTemp, Error, TEXT("Section Branch is not valid"));
+		return;
 	}
-
-	Slots[ClueDataAsset->GetClueName()]->UpdateSlot(ClueDataAsset);
-	
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updated Slot", EDebuggingType::DT_Log);
+	// Load the Config Data Asset asynchonously
+	FStreamableManager Streamable;
+	Streamable.RequestAsyncLoad(SectionBranch.ToSoftObjectPath(), FStreamableDelegate::CreateUObject(this, &UClueSection::OnSectionBranchLoaded));
 }
+
 
 void UClueSection::SetSectionSize(int SectionSize)
 {
@@ -49,4 +34,46 @@ void UClueSection::SetSectionSize(int SectionSize)
 		SlotArray.Add(CreateWidget<UClueSlot>(GetOwningPlayer(), ClueSlotClass));
 		SectionPanel->AddChild(SlotArray[i]);
 	}
+}
+
+void UClueSection::OnSectionBranchLoaded_Implementation()
+{	
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Section Branch Loaded", EDebuggingType::DT_Log);
+	
+	if(IsValid(SectionBranch.Get()))
+	{
+		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Section Branch: ["+ SectionBranch.Get()->GetClueLocation() +"] Valid", EDebuggingType::DT_Log);
+
+		// If there are branches in the config, then we need to create a new section for each branch
+		for(const auto& branch : SectionBranch.Get()->GetBranches())
+		{
+			// Continue if the branch is not valid
+			if(!IsValid(branch))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Branch is not valid"));
+				continue;
+			}
+			
+			// Log the branch name
+			UMainDebugFunctionLibrary::DebugLogWithObject(this, "Branch Name: [" +branch->GetClueLocation()+"]", EDebuggingType::DT_Log);
+			
+			// Create a new section for each branch
+			UClueSection* section = CreateWidget<UClueSection>(GetOwningPlayer(), this->GetClass());
+			section->SectionBranch = branch;
+			section->LoadBranch();
+			section->SetSectionSize(branch->GetClues().Num());
+			SectionPanel->AddChild(section);
+		}
+
+		for(int i =0 ; i< SlotArray.Num(); i++)
+		{
+			UMainDebugFunctionLibrary::DebugLogWithObject(this, "Setting Slot ["+FString::FromInt(i)+"] Node ID to ["+FString::FromInt(SectionBranch.Get()->GetClues()[i]->GetClueIndex())+"]", EDebuggingType::DT_Log);
+			SlotArray[i]->SetNodeID(SectionBranch.Get()->GetClues()[i]->GetClueIndex());
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Section Branch is not valid"));
+	}
+
 }

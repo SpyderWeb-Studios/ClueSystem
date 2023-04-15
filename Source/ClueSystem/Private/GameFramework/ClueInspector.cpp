@@ -14,6 +14,7 @@ AClueInspector::AClueInspector()
 
 	ClueCaptureComponent = CreateDefaultSubobject<USceneCaptureComponent2D>("Clue Inspector");
 	ClueCaptureComponent->SetupAttachment(StaticMeshComponent);
+	ClueCaptureComponent->SetRelativeLocation(FVector(-1,0,0));
 }
 
 // Called when the game starts or when spawned
@@ -49,9 +50,19 @@ void AClueInspector::InspectClue(UPrimaryDataAsset_Clue* ClueDataAsset)
 	 */
 	
 	StaticMeshComponent->SetStaticMesh(ClueDataAsset->GetClueStaticMesh());
+
+	// Log the Clue Mesh and Rotation
+	UE_LOG(LogTemp, Warning, TEXT("Clue Mesh: %s"), *GetNameSafe(ClueDataAsset->GetClueStaticMesh()));
+	UE_LOG(LogTemp, Warning, TEXT("Clue Rotation: %s"), *ClueDataAsset->GetDefaultRotation().ToString());
+	
 	StaticMeshComponent->SetWorldRotation(ClueDataAsset->GetDefaultRotation());
 
 	FVector loc = ClueDataAsset->GetCameraOffset() + (CameraDefaultLocation * ClueDataAsset->GetCameraDistance());
+
+	// Log the Clue Camera Location, with the Camera Offset and Camera Distance
+	UE_LOG(LogTemp, Warning, TEXT("Clue Camera Relative Location: %s"), *loc.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Clue Camera Offset: %s"), *ClueDataAsset->GetCameraOffset().ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Clue Camera Distance: %f"), ClueDataAsset->GetCameraDistance());	
 	
 	ClueCaptureComponent->SetRelativeLocation(loc);
 }

@@ -24,17 +24,7 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	TSubclassOf<UClueSection> ClueSectionClass;
-
-	/**
-	 * @brief Handles updating the list of slots, including the size of the list and the contents of known clues
-	 */
-	UFUNCTION()
-	void UpdateSlotList(UPrimaryDataAsset_Clue* CollectedClue);
-
-
-	UFUNCTION()
-	void UpdateSectionSize(const FString& ClueLocation, int SectionSize);
-
+	
 	UFUNCTION()
 	void UpdateSectionTree(const FClueTree ClueTree);
 

@@ -6,6 +6,7 @@
 #include "PrimaryDataAsset_Clue.h"
 #include "Engine/DataAsset.h"
 #include "Libraries/EventDelegateLibrary.h"
+#include "Widgets/Manager/ClueBranchManager.h"
 #include "PrimaryDataAsset_ClueConfig.generated.h"
 
 /**
@@ -29,27 +30,32 @@ public:
 	
 	void UpdateClueIndices(FString Location);
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="ClueSystem")
 	int GetIndex() const { return Index; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="ClueSystem")
 	void SetIndex(int NewIndex) { Index = NewIndex; }
 
 	FClueTree GetClueTree() const;
 
+	UFUNCTION(BlueprintPure, Category="ClueSystem")
+	TSubclassOf<UClueBranchManager> GetClueBranchManagerClass() const { return ClueBranchManagerClass; }
 
 protected:
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="ClueSystem")
 	FString ClueLocation; 
 
-	UPROPERTY(VisibleAnywhere, Transient)
+	UPROPERTY(EditDefaultsOnly, Category="ClueSystem")
+	TSubclassOf<UClueBranchManager> ClueBranchManagerClass;
+	
+	UPROPERTY(VisibleAnywhere, Transient, Category="ClueSystem")
 	int Index;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="ClueSystem")
 	TArray<UPrimaryDataAsset_ClueConfig*> Branches;
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="ClueSystem")
 	TArray<UPrimaryDataAsset_Clue*> Clues;
 	
 	bool operator==(const UPrimaryDataAsset_ClueConfig& Other) const

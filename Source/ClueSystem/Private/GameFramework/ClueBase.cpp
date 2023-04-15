@@ -49,7 +49,17 @@ void AClueBase::LoadClueAssetData_Implementation()
 void AClueBase::SendToClueManager(UPrimaryDataAsset_Clue* Clue)
 {
 	UClueManagerSubsystem* ClueManager = GetGameInstance()->GetSubsystem<UClueManagerSubsystem>();
-	if(!ClueManager) return;
-	if(ClueManager->CollectClue(Clue)) Destroy();
+	if(!ClueManager)
+	{
+		// Log Error
+		UE_LOG(LogBlueprint, Error, TEXT("Clue Manager Subsystem Not Found"));
+		return;
+	}
+	if(ClueManager->CollectClue(Clue))
+	{
+		// Log Success
+		UE_LOG(LogBlueprint, Display, TEXT("Clue Collected, Destroying Actor"));
+		Destroy();
+	}
 }
 

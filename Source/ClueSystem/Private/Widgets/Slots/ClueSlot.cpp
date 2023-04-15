@@ -12,16 +12,19 @@ void UClueSlot::NativeConstruct()
 
 	Button_ViewClue->OnPressed.AddUniqueDynamic(this, &UClueSlot::ViewClue);
 
-	OnDataAssetLoaded.AddUniqueDynamic(this, &UClueSlot::OnDataLoaded);
+	if(UClueManagerSubsystem* ClueManagerSubsystem = GetGameInstance()->GetSubsystem<UClueManagerSubsystem>())
+	{
+		ClueManagerSubsystem->OnCollectedClue.AddUniqueDynamic(this, &UClueSlot::UpdateSlot);
+	}
 }
 
 void UClueSlot::UpdateSlot(UPrimaryDataAsset_Clue* Clue)
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updating Slot", EDebuggingType::DT_Log);
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updating Slot ["+FString::FromInt(GetNodeID()) +"]", EDebuggingType::DT_Log);
 	
-	if(!Clue) return;
+	if(!Clue || Clue->GetClueIndex() != GetNodeID()) return;
 	
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset is Valid", EDebuggingType::DT_Log);
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset With Index ["+ FString::FromInt(Clue->GetClueIndex()) +"] is Valid", EDebuggingType::DT_Log);
 
 	TextBlock_ClueName->SetText(FText::FromString(Clue->GetClueName()));
 
@@ -32,18 +35,24 @@ void UClueSlot::UpdateSlot(UPrimaryDataAsset_Clue* Clue)
 
 void UClueSlot::ViewClue()
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Attempting to View Clue", EDebuggingType::DT_Log);
-	
-	LoadData();
+	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Attempting to View Clue [" +FString::FromInt(GetNodeID())+"]", EDebuggingType::DT_Log);
+
+	// Async Load Data Asset
+	if(ClueData.IsValid())
+	{
+		FStreamableManager StreamableManager;
+		StreamableManager.RequestAsyncLoad(ClueData.ToSoftObjectPath(), FStreamableDelegate::CreateUObject(this, &UClueSlot::OnDataLoaded));
+	}
 }
 
-void UClueSlot::OnDataLoaded(UPrimaryDataAsset_Clue* Clue)
+void UClueSlot::OnDataLoaded()
 {
 	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Loaded", EDebuggingType::DT_Log);
-	if(Clue)
+	if(ClueData.Get() && GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
 	{
+		
 		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid", EDebuggingType::DT_Log);
-		GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(Clue);
+		GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
 		
 	}
 }

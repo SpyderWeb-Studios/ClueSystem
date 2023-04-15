@@ -22,7 +22,8 @@ class CLUESYSTEM_API UClueSlot : public UUserWidget
 public:
 
 	virtual void NativeConstruct() override;
-	
+
+	UFUNCTION(BlueprintCallable)
 	void UpdateSlot(UPrimaryDataAsset_Clue* Clue);
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
@@ -37,16 +38,22 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TSoftObjectPtr<UPrimaryDataAsset_Clue> ClueData;
 
+	UFUNCTION(BlueprintCallable)
+		void SetNodeID(int ID) {NodeID = ID;}
+
+	UFUNCTION(BlueprintCallable)
+		int GetNodeID() const {return NodeID;}
+
 protected:
 
 	UFUNCTION(BlueprintCallable)
 		void ViewClue();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void LoadData();
-
-	UFUNCTION(BlueprintCallable)
-		void OnDataLoaded(UPrimaryDataAsset_Clue* Clue);
+	
+	UFUNCTION()
+		void OnDataLoaded();
 
 	FOnDataAssetLoaded OnDataAssetLoaded;
+
+	UPROPERTY(BlueprintReadOnly)
+	int NodeID;
 };

@@ -83,7 +83,12 @@ struct FClueTreeNode
 		Clues.Add(Clue);
 	}
 
-	
+	int FindChildRelativeIndex(const UPrimaryDataAsset_ClueConfig* Child);
+
+	int FindChildRelativeIndex(const UPrimaryDataAsset_Clue* Child);
+
+
+
 	UPROPERTY(EditDefaultsOnly)
 	int NodeID;
 

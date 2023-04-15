@@ -27,6 +27,7 @@ public:
 	
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
 
+
 	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"))
 	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number)
 	{
@@ -63,6 +64,9 @@ public:
 	int GetNumberOfCollectedCluesInLocation(FString Location) const;
 
 	UFUNCTION(BlueprintPure)
+	int GetIndexFromName(FString ClueName) const;
+	
+	UFUNCTION(BlueprintPure)
 	int GetParentIndexFromIndex(int Index) const;
 
 	UFUNCTION(BlueprintPure)
@@ -73,7 +77,18 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
-	
+
+	UFUNCTION(BlueprintCallable)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromIndex(int Index) const;
+
+	UFUNCTION(BlueprintCallable)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromName(FString ClueName) const;
+
+	UFUNCTION(BlueprintCallable)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentIndex(int ParentIndex, FString ClueLocation) const;
+
+	UFUNCTION(BlueprintCallable)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentName(FString ParentName, FString ClueLocation) const;
 protected:
 
 	UPROPERTY(BlueprintReadOnly)

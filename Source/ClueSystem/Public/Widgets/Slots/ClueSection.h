@@ -8,7 +8,7 @@
 #include "ClueSection.generated.h"
 
 
-class UPrimaryDataAsset_Clue;
+class UPrimaryDataAsset_ClueConfig;
 /**
  *
  * 
@@ -19,12 +19,16 @@ class CLUESYSTEM_API UClueSection : public UUserWidget
 	GENERATED_BODY()
 public:
 
-	void UpdateSection(UPrimaryDataAsset_Clue* ClueDataAsset);
-
 	void SetSectionSize(int SectionSize);
 
 	int GetSectionSize() const {return SlotArray.Num();}
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void LoadBranch();
 
+	UFUNCTION(BlueprintCallable)
+	void SetBranch(TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> Branch) {SectionBranch = Branch;}
+	
 protected:
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
@@ -36,4 +40,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
 	UPanelWidget* SectionPanel;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> SectionBranch;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnSectionBranchLoaded();
 };
