@@ -31,10 +31,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	TSoftObjectPtr<UPrimaryDataAsset_Clue> ClueDataAsset; 
 
-	UPROPERTY(BlueprintCallable)
-	FOnDataAssetLoaded OnDataAssetLoaded;
+	UFUNCTION(BlueprintCallable)
+	void OnDataAssetLoaded();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent)
 	void LoadClueAssetData();
 
 	UFUNCTION()

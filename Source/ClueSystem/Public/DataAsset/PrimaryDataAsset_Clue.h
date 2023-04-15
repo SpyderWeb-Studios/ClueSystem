@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "Enums/EClueLocation.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "PrimaryDataAsset_Clue.generated.h"
+
+class UClueSection;
+class UClueSlot;
+
 
 /**
  * 
@@ -21,47 +24,50 @@ public:
 
 #pragma region Getters
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	FString GetClueName(){return ClueName;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	FString GetClueInformation(){return ClueInformation;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	int GetClueIndex() const {return ClueIndex;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	EClueLocation GetClueLocation() const {return ClueLocation;}
+	UFUNCTION(BlueprintPure)
+	FString GetClueLocation() const {return ClueLocation;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	TArray<FAdditionalClueInfo> GetAdditionalInformation(){return AdditionalInformation;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	UStaticMesh* GetClueStaticMesh() const {return ClueMesh;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	FRotator GetDefaultRotation() const {return DefaultRotation;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	FVector GetCameraOffset() const {return CameraLocationOffset;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	float GetCameraDistance() const {return CameraDistance;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	bool GetDoesUseMesh() const{return bUsesMesh;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	TSoftObjectPtr<UTexture2D> GetClueImage() const {return ClueImage;}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintPure)
 	UTexture2D* GetClueIcon() const {return ClueIcon;}
+
+	UFUNCTION(BlueprintPure)
+	TSubclassOf<UClueSlot> GetClueSlotClass() const {return ClueSlotClass;}
 
 #pragma endregion 
 
 #pragma region Setters
 	
-	void SetClueLocation(EClueLocation Location) {ClueLocation = Location;}
+	void SetClueLocation(FString Location) {ClueLocation = Location;}
 
 	void SetClueIndex(int Index) {ClueIndex = Index;}
 
@@ -75,21 +81,24 @@ protected:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
     FString ClueInformation;
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
-	int ClueIndex;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category="Setup")
+	int ClueIndex = -1;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
-	TEnumAsByte<EClueLocation> ClueLocation;
+	FString ClueLocation;
 		
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic|Setup")
 	bool bUsesMesh;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TObjectPtr<UTexture2D> ClueIcon;
+
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
+	TSubclassOf<UClueSlot> ClueSlotClass;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TArray<FAdditionalClueInfo> AdditionalInformation;
-	
 	
 #pragma region Mesh
 	

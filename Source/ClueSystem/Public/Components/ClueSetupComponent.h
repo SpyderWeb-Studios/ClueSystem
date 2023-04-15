@@ -22,7 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TArray<FClueLocationConfig> ClueConfig;
+	FClueLocationConfig ClueConfig;
 
 		
 };

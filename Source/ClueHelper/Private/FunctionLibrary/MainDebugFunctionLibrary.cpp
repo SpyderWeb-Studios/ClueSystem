@@ -22,6 +22,6 @@ void UMainDebugFunctionLibrary::DebugLog(FString message, EDebuggingType DebugTy
 
 void UMainDebugFunctionLibrary::DebugLogWithObject(UObject* Object, FString message, EDebuggingType DebugType = EDebuggingType::DT_Log, float DisplayTime, FColor DisplayColour)
 {
-	if (Object) message = Object->GetFName().ToString() + message;
+	if (Object) message = Object->GetFName().ToString()+ ": " + message;
 	DebugLog(message, DebugType, DisplayTime, DisplayColour);
 }

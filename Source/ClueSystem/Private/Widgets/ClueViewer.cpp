@@ -51,7 +51,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 				if(!Information.ClueDataAsset) continue;
 
 				// Check to see if the Clue Manager has registered the Player as having Collected the Clue
-				bool result = ClueManagerSubsystem->HasCollectedClue(Information.ClueDataAsset);
+				const bool result = ClueManagerSubsystem->HasCollectedClue(Information.ClueDataAsset);
 				
 				UMainDebugFunctionLibrary::DebugLogWithObject(this, Information.ClueDataAsset->GetClueName() + " Reveals: "
 					+ (result ? Information.Information : " Not In Clue Manager"), 
