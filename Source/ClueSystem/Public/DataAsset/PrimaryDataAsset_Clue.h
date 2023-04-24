@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/PanelSlot.h"
 #include "Engine/DataAsset.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "PrimaryDataAsset_Clue.generated.h"
@@ -22,6 +23,12 @@ public:
 
 	UPrimaryDataAsset_Clue();
 
+	UFUNCTION(BlueprintCallable)
+	virtual bool ViewClue(UPanelWidget* ClueSwitcherSlot);
+
+	UFUNCTION(BlueprintNativeEvent)
+	bool StopViewingClue(UPanelWidget* ClueSwitcherSlot);
+
 #pragma region Getters
 
 	UFUNCTION(BlueprintPure)
@@ -38,30 +45,21 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	TArray<FAdditionalClueInfo> GetAdditionalInformation(){return AdditionalInformation;}
-
-	UFUNCTION(BlueprintPure)
-	UStaticMesh* GetClueStaticMesh() const {return ClueMesh;}
-
-	UFUNCTION(BlueprintPure)
-	FRotator GetDefaultRotation() const {return DefaultRotation;}
-
-	UFUNCTION(BlueprintPure)
-	FVector GetCameraOffset() const {return CameraLocationOffset;}
-
-	UFUNCTION(BlueprintPure)
-	float GetCameraDistance() const {return CameraDistance;}
-
-	UFUNCTION(BlueprintPure)
-	bool GetDoesUseMesh() const{return bUsesMesh;}
-
-	UFUNCTION(BlueprintPure)
-	TSoftObjectPtr<UTexture2D> GetClueImage() const {return ClueImage;}
-
+	
 	UFUNCTION(BlueprintPure)
 	UTexture2D* GetClueIcon() const {return ClueIcon;}
 
 	UFUNCTION(BlueprintPure)
 	TSubclassOf<UClueSlot> GetClueSlotClass() const {return ClueSlotClass;}
+
+	UFUNCTION(BlueprintPure)
+	UStaticMesh* GetClueDisplayMesh() const {return ClueDisplayMesh;}
+
+	UFUNCTION(BlueprintPure)
+	TSubclassOf<UUserWidget> GetClueWidgetClass() const {return ClueWidgetClass;}
+
+	UFUNCTION(BlueprintPure)
+	UUserWidget* GetClueWidgetInstance() const {return ClueWidgetInstance;}
 
 #pragma endregion 
 
@@ -80,48 +78,29 @@ protected:
     
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
     FString ClueInformation;
+
+	UPROPERTY(EditDefaultsOnly, Category="Basic")
+	TObjectPtr<UStaticMesh> ClueDisplayMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category="Basic")
+	TSubclassOf<UUserWidget> ClueWidgetClass;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category="Setup")
 	int ClueIndex = -1;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
 	FString ClueLocation;
-		
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic|Setup")
-	bool bUsesMesh;
-
+	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TObjectPtr<UTexture2D> ClueIcon;
-
-
+	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TSubclassOf<UClueSlot> ClueSlotClass;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TArray<FAdditionalClueInfo> AdditionalInformation;
-	
-#pragma region Mesh
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	UStaticMesh* ClueMesh;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	FRotator DefaultRotation;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	FVector CameraLocationOffset;
+private:
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	float CameraDistance;
-
-#pragma endregion 
-
-#pragma region Image
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == false", EditConditionHides))
-	TObjectPtr<UTexture2D> ClueImage;
-	
-#pragma endregion
-
-	
+	TObjectPtr<UUserWidget> ClueWidgetInstance;
 };

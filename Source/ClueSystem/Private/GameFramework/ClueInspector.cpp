@@ -29,7 +29,14 @@ void AClueInspector::BeginPlay()
 
 void AClueInspector::InspectClue(UPrimaryDataAsset_Clue* ClueDataAsset)
 {
-	if(!ClueDataAsset) return;
+	if(!IsValid(ClueDataAsset)) return;
+
+	InspectClueMesh(Cast<UClueTypeMesh>(ClueDataAsset));
+}
+
+void AClueInspector::InspectClueMesh(UClueTypeMesh* ClueDataAsset)
+{
+	if(!IsValid(ClueDataAsset)) return;
 
 
 	/* Display the Clue:

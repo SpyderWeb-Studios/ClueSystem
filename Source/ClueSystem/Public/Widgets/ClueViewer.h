@@ -7,6 +7,7 @@
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
+#include "Components/WidgetSwitcher.h"
 #include "DataAsset/PrimaryDataAsset_Clue.h"
 #include "Slots/ClueDescriptionSlot.h"
 #include "ClueViewer.generated.h"
@@ -32,6 +33,9 @@ virtual void NativeConstruct() override;
 	void ResetViewer();
 	
 protected:
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	TObjectPtr<UPanelWidget> ClueViewerPanel;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
 	UTextBlock* TextBlock_ClueDescription;

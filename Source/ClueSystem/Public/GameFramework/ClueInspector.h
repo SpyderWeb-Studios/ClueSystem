@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DataAsset/PrimaryDataAsset_Clue.h"
+#include "DataAsset/ClueTypes/ClueTypeMesh.h"
 #include "GameFramework/Actor.h"
 #include "ClueInspector.generated.h"
 
@@ -29,8 +30,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void InspectClue(UPrimaryDataAsset_Clue* ClueDataAsset);
+	UFUNCTION(BlueprintCallable)
+		void InspectClue(UPrimaryDataAsset_Clue* ClueDataAsset);
+
+	UFUNCTION(BlueprintCallable)
+		void InspectClueMesh(UClueTypeMesh* ClueDataAsset);
 
 private:
 
