@@ -1,4 +1,6 @@
-﻿#include "ClueHelper.h"
+﻿// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
+
+#include "ClueHelper.h"
 
 #define LOCTEXT_NAMESPACE "FClueHelperModule"
 

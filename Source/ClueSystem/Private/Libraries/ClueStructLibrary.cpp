@@ -1,4 +1,6 @@
-﻿#include "Libraries/ClueStructLibrary.h"
+﻿// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
+
+#include "Libraries/ClueStructLibrary.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 
 int FClueTreeNode::FindChildRelativeIndex(const UPrimaryDataAsset_ClueConfig* Child)

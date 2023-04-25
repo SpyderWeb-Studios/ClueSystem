@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
+
+
+#pragma once
 #include "CoreMinimal.h"
 #include "ClueStructLibrary.generated.h"
 
