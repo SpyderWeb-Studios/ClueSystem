@@ -22,7 +22,7 @@ struct FClueTree
 		this->ClueTreeNodes = Tree;
 	}
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
 	TMap<int, FClueTreeNode> ClueTreeNodes;
 };
 

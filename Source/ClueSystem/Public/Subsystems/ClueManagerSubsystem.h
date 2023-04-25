@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Libraries/ClueConfig.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "Libraries/EventDelegateLibrary.h"
 
@@ -25,76 +24,83 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
-
-
-	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"))
+	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
+	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
+	
+	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"), Category="Clue System|Clue Manager|Setup")
 	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number);
 
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SetClueConfigRoot(const FClueLocationConfig& Root);
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
+	void SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root);
+
+
+#pragma region Events
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck);
-	
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
 	FOnCollectedClue OnCollectedClue;
 	
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
 	FOnClueSelected OnClueSelected;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
 	FOnClueImageLoaded OnClueImageLoaded;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
 	FOnUpdateClueTree OnClueTrueCreated;
+
+#pragma endregion
+
+#pragma region Utility
+		
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Clue System|Clue Manager|Utility")
+	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck);
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager|Utility")
 	TMap<FString, int> NumberOfCluesInLocations;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetNumberOfCluesInLocation(FString Location) const;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetNumberOfCollectedCluesInLocation(FString Location) const;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetIndexFromName(FString ClueName) const;
 	
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetParentIndexFromIndex(int Index) const;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetParentIndexFromName(FString ClueName) const;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	TMap<int, FClueTreeNode> GetClueTree() const;
 	
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager|Utility")
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromIndex(int Index) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager|Utility")
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromName(FString ClueName) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager|Utility")
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentIndex(int ParentIndex, FString ClueLocation) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager|Utility")
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentName(FString ParentName, FString ClueLocation) const;
 
+#pragma endregion 
 
 protected:
 
-	UPROPERTY(BlueprintReadOnly)
-	FClueLocationConfig ClueConfigRoot;
+	UPROPERTY(BlueprintReadOnly, Category="Clue System|Clue Manager")
+	TObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfigRoot;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
 	TMap<FString, FAreaClues> CollectedClues;
 	
 	// Tree Structure
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
 	TMap<int, FClueTreeNode> ClueConfigTree;
 
 };

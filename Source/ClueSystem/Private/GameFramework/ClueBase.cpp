@@ -14,7 +14,12 @@ AClueBase::AClueBase()
 bool AClueBase::AttemptInteractionWithClue()
 {
 	UE_LOG(LogBlueprint, Display, TEXT("Clue Interacting"));
-	LoadClueAssetData();
+	
+	FStreamableManager StreamableManager;
+    
+	TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(ClueDataAsset.ToSoftObjectPath(),
+	FStreamableDelegate::CreateUObject(this, &AClueBase::OnDataAssetLoaded), 0, false);
+	
 	return true;
 }
 
@@ -36,14 +41,6 @@ void AClueBase::OnDataAssetLoaded()
 	UE_LOG(LogBlueprint, Display, TEXT("Clue Data Asset: %s"), *GetNameSafe(ClueData));
 	
 	SendToClueManager(ClueData);
-}
-
-void AClueBase::LoadClueAssetData_Implementation()
-{
-	FStreamableManager StreamableManager;
-    
-	TSharedPtr<FStreamableHandle> Handle = StreamableManager.RequestAsyncLoad(ClueDataAsset.ToSoftObjectPath(),
-	FStreamableDelegate::CreateUObject(this, &AClueBase::OnDataAssetLoaded), 0, false);
 }
 
 void AClueBase::SendToClueManager(UPrimaryDataAsset_Clue* Clue)

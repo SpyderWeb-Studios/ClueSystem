@@ -3,6 +3,7 @@
 
 #include "Widgets/ClueViewer.h"
 
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
@@ -29,6 +30,22 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 	 *    - If so then load in the additional information
 	 */
 
+	// View the Collected Clue
+	//CollectedClue->ViewClue(ClueViewerPanel->GetSlots()[0]);
+
+	if(!IsValid(ClueViewerSwitcher))
+	{
+		// Log to say that the Clue Viewer Panel is Invalid
+		UE_LOG(LogBlueprint, Error, TEXT("Clue Viewer Panel is Invalid"));
+		return;
+	}
+
+
+	if(!CollectedClue->ViewClue(ClueViewerSwitcher))
+	{
+		// Log to say that the Clue could not be viewed
+		UE_LOG(LogBlueprint, Error, TEXT("Clue could not be viewed"));
+	}
 	
 	// Simply Set the Clue Description from the Clue Information
 	TextBlock_ClueDescription->SetText(FText::FromString(CollectedClue->GetClueInformation()));
@@ -68,7 +85,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 				VerticalBox_ClueSections->AddChild(slot);
 			}
 		}
-}
+	}
 }
 
 void UClueViewer::ResetViewer()

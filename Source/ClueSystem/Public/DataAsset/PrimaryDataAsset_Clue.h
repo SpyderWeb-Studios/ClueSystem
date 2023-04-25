@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/WidgetSwitcher.h"
 #include "Engine/DataAsset.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "PrimaryDataAsset_Clue.generated.h"
@@ -12,7 +13,8 @@ class UClueSlot;
 
 
 /**
- * 
+ * This is the base class for all clues. It contains only the information that is needed to display a clue in the UI. If you want to
+ * create a new Clue Type, then extend this class and add your code in the new class. 
  */
 UCLASS()
 class CLUESYSTEM_API UPrimaryDataAsset_Clue : public UPrimaryDataAsset
@@ -22,46 +24,43 @@ public:
 
 	UPrimaryDataAsset_Clue();
 
+	UFUNCTION(BlueprintCallable, Category="Clue System|Inspecting")
+	virtual bool ViewClue(UWidgetSwitcher* ClueSwitcherSlot);
+
+	UFUNCTION(BlueprintNativeEvent, Category="Clue System|Inspecting")
+	bool StopViewingClue(UWidgetSwitcher* ClueSwitcherSlot);
+
 #pragma region Getters
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	FString GetClueName(){return ClueName;}
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	FString GetClueInformation(){return ClueInformation;}
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	int GetClueIndex() const {return ClueIndex;}
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	FString GetClueLocation() const {return ClueLocation;}
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	TArray<FAdditionalClueInfo> GetAdditionalInformation(){return AdditionalInformation;}
-
-	UFUNCTION(BlueprintPure)
-	UStaticMesh* GetClueStaticMesh() const {return ClueMesh;}
-
-	UFUNCTION(BlueprintPure)
-	FRotator GetDefaultRotation() const {return DefaultRotation;}
-
-	UFUNCTION(BlueprintPure)
-	FVector GetCameraOffset() const {return CameraLocationOffset;}
-
-	UFUNCTION(BlueprintPure)
-	float GetCameraDistance() const {return CameraDistance;}
-
-	UFUNCTION(BlueprintPure)
-	bool GetDoesUseMesh() const{return bUsesMesh;}
-
-	UFUNCTION(BlueprintPure)
-	TSoftObjectPtr<UTexture2D> GetClueImage() const {return ClueImage;}
-
-	UFUNCTION(BlueprintPure)
+	
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	UTexture2D* GetClueIcon() const {return ClueIcon;}
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	TSubclassOf<UClueSlot> GetClueSlotClass() const {return ClueSlotClass;}
+
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
+	UStaticMesh* GetClueDisplayMesh() const {return ClueDisplayMesh;}
+
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
+	TSubclassOf<UUserWidget> GetClueWidgetClass() const {return ClueWidgetClass;}
+
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
+	UUserWidget* GetClueWidgetInstance() const {return ClueWidgetInstance;}
 
 #pragma endregion 
 
@@ -74,54 +73,63 @@ public:
 #pragma endregion
 	
 protected:
-
+	/**
+	 * @brief The Name of the Clue to display in the UI
+	 */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
 	FString ClueName;
-    
-    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
+
+	/**
+	 * @brief The Information associated with the Clue 
+	 */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic")
     FString ClueInformation;
-	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category="Setup")
+
+	/**
+	 * @brief The Mesh that will be present in the World
+	 */
+	UPROPERTY(EditDefaultsOnly, Category="Basic")
+	TObjectPtr<UStaticMesh> ClueDisplayMesh;
+
+	/**
+	 * @brief The Widget responsible for Inspecting the Clue
+	 */
+	UPROPERTY(EditDefaultsOnly, Category="Basic")
+	TSubclassOf<UUserWidget> ClueWidgetClass;
+
+	/**
+	 * @brief The Index of the Clue. Will be filled in at Runtime
+	 */
+	 UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category="Setup")
 	int ClueIndex = -1;
-	
+
+	/**
+	 * @brief The Location of the Clue, will be filled in at Runtime
+	 */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Setup")
 	FString ClueLocation;
-		
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Basic|Setup")
-	bool bUsesMesh;
 
+	/**
+	 * @brief The Icon to be displayed on the Clue Slot
+	 */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TObjectPtr<UTexture2D> ClueIcon;
 
-
+	/**
+	 * @brief The Widget Class that will be placed in the Branch Manager
+	 */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TSubclassOf<UClueSlot> ClueSlotClass;
-	
+
+	/**
+	 * @brief The Information that is reliant on OTHER clues being collected
+	 */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TArray<FAdditionalClueInfo> AdditionalInformation;
-	
-#pragma region Mesh
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	UStaticMesh* ClueMesh;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	FRotator DefaultRotation;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	FVector CameraLocationOffset;
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == true", EditConditionHides))
-	float CameraDistance;
-
-#pragma endregion 
-
-#pragma region Image
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information", meta=(EditCondition = "bUsesMesh == false", EditConditionHides))
-	TObjectPtr<UTexture2D> ClueImage;
-	
-#pragma endregion
-
-	
+private:
+	/**
+	 * @brief The Widget Instance that is created from the ClueWidgetClass
+	 */
+	 TObjectPtr<UUserWidget> ClueWidgetInstance;
 };

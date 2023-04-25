@@ -10,7 +10,8 @@
 #include "PrimaryDataAsset_ClueConfig.generated.h"
 
 /**
- * 
+ * This Data Asset Class is an abstract way to determine the structure of the Clue Tree. It holds the vital
+ * information like how each branch is structured, what clues are in each branch, and what the name of the location is.
  */
 UCLASS()
 class CLUESYSTEM_API UPrimaryDataAsset_ClueConfig : public UPrimaryDataAsset
@@ -19,26 +20,26 @@ class CLUESYSTEM_API UPrimaryDataAsset_ClueConfig : public UPrimaryDataAsset
 
 public:
 
-	UFUNCTION(BlueprintPure, Category = "ClueSystem")
+	UFUNCTION(BlueprintPure, Category = "ClueSystem|ClueBranchManager")
 	FString GetClueLocation() const { return ClueLocation; }
 
-	UFUNCTION(BlueprintPure, Category="ClueSystem")
+	UFUNCTION(BlueprintPure, Category="ClueSystem|ClueBranchManager")
 	TArray<UPrimaryDataAsset_Clue*> GetClues() const { return Clues; }
 
-	UFUNCTION(BlueprintPure, Category="ClueSystem")
+	UFUNCTION(BlueprintPure, Category="ClueSystem|ClueBranchManager")
 	TArray<UPrimaryDataAsset_ClueConfig*> GetBranches() const { return Branches; }
 	
 	void UpdateClueIndices(FString Location);
 
-	UFUNCTION(BlueprintPure, Category="ClueSystem")
+	UFUNCTION(BlueprintPure, Category="ClueSystem|ClueBranchManager")
 	int GetIndex() const { return Index; }
 
-	UFUNCTION(BlueprintCallable, Category="ClueSystem")
+	UFUNCTION(BlueprintCallable, Category="ClueSystem|ClueBranchManager")
 	void SetIndex(int NewIndex) { Index = NewIndex; }
 
 	FClueTree GetClueTree() const;
 
-	UFUNCTION(BlueprintPure, Category="ClueSystem")
+	UFUNCTION(BlueprintPure, Category="ClueSystem|ClueBranchManager")
 	TSubclassOf<UClueBranchManager> GetClueBranchManagerClass() const { return ClueBranchManagerClass; }
 
 protected:

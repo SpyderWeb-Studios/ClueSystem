@@ -26,15 +26,21 @@ public:
 	
 
 protected:
-
-	UPROPERTY(BlueprintReadOnly, Category = "Clue Config", meta = (AllowPrivateAccess = "true", BindWidget))
+	/**
+	 * @brief The Main Panel to add the Child Clue Branches to.
+	 */
+	 UPROPERTY(BlueprintReadOnly, Category = "Clue Config", meta = (AllowPrivateAccess = "true", BindWidget))
 	TObjectPtr<UPanelWidget> ClueBranchesPanel;
 	
 	// The Clue Config that this Clue Branch Manager is displaying.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clue Config", meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfig;
 
-	UFUNCTION()
+	/**
+	 * @brief The Event that is called when the Clue Config is loaded. This handles a majority of the procedural generation of the Clue Branches and Clue Leaves.
+	 * This can be overridden in Blueprints to add additional functionality, or replace the functionality entirely.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "ClueSystem")
 	void OnClueConfigLoaded() const;
 	
 	virtual void NativeConstruct() override;

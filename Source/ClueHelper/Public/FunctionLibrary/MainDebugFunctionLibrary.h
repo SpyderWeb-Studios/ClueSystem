@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-
 #include "Enums/EDebuggingType.h"
-
 #include "MainDebugFunctionLibrary.generated.h"
 
 /**
@@ -18,9 +16,9 @@ class CLUEHELPER_API UMainDebugFunctionLibrary : public UBlueprintFunctionLibrar
 	GENERATED_BODY()
 public:
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Main Debug Library")
 	static void DebugLog(FString message, EDebuggingType DebugType, float DisplayTime = 0.0f, FColor DisplayColour = FColor::Green);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Main Debug Library")
 	static void DebugLogWithObject(UObject* Object,FString message, EDebuggingType DebugType, float DisplayTime = 0.0f, FColor DisplayColour = FColor::Green);
 };

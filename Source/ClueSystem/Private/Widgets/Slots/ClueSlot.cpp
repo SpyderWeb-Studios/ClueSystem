@@ -2,7 +2,7 @@
 
 
 #include "Widgets/Slots/ClueSlot.h"
-
+#include "Engine/Texture2D.h"
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 

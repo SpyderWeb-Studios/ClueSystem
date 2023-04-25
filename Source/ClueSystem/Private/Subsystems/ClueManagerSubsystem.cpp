@@ -4,6 +4,7 @@
 #include "Subsystems/ClueManagerSubsystem.h"
 
 #include "ClueSystem.h"
+#include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 
 
@@ -58,13 +59,13 @@ void UClueManagerSubsystem::UpdateNumberOfCluesInLocation(FString ParentBranch, 
 }
 
 
-void UClueManagerSubsystem::SetClueConfigRoot(const FClueLocationConfig& Root)
+void UClueManagerSubsystem::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root)
 {
 	// Iterate through the Root and recursively add the children to the Map
 	ClueConfigRoot = Root;
 
 	// RecursiveCreateTree(ClueConfigRoot, ClueConfigTree);
-	CreateTreeRecursively(Root.RootNode, ClueConfigTree);
+	CreateTreeRecursively(Root, ClueConfigTree);
 
 	// Iterate through the Map and Log the Tree
 	for(const auto& node : ClueConfigTree)
