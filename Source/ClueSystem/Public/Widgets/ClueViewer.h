@@ -29,21 +29,24 @@ virtual void NativeConstruct() override;
 	UFUNCTION()
 	void OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Viewer")	
 	void ResetViewer();
 	
 protected:
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
+	TObjectPtr<UWidgetSwitcher> ClueViewerSwitcher;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
 	TObjectPtr<UPanelWidget> ClueViewerPanel;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
 	UTextBlock* TextBlock_ClueDescription;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
 	UVerticalBox* VerticalBox_ClueSections;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Viewer")
 	TSubclassOf<UClueDescriptionSlot> ClueDescriptionClass;
 
 private:

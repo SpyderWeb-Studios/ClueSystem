@@ -14,13 +14,13 @@ struct FAdditionalClueInfo
 	/**
 	 * @brief The Data Asset necessary for this information to be available
 	 */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System")
 	UPrimaryDataAsset_Clue* ClueDataAsset;
 
 	/**
 	 * @brief The Additional Information to be accessed
 	 */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System")
 	FString Information;
 };
 
@@ -29,7 +29,7 @@ struct FAreaClues
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
 	TMap<UPrimaryDataAsset_Clue*, bool> CollectedClues;
 };
 
@@ -89,15 +89,15 @@ struct FClueTreeNode
 
 
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="Clue System")
 	int NodeID;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="Clue System")
 	FString NodeName;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="Clue System")
 	TArray<UPrimaryDataAsset_ClueConfig*> ChildrenNodes;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="Clue System")
 	TArray<UPrimaryDataAsset_Clue*> Clues;
 };

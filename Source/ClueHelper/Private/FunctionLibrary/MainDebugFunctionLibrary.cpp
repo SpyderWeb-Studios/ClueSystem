@@ -3,6 +3,9 @@
 
 #include "FunctionLibrary/MainDebugFunctionLibrary.h"
 
+#include "Engine/Engine.h"
+
+
 void UMainDebugFunctionLibrary::DebugLog(FString message, EDebuggingType DebugType, float DisplayTime, FColor DisplayColour)
 {
 	switch (DebugType) {

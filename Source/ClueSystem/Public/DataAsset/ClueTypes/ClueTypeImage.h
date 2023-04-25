@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "DataAsset/PrimaryDataAsset_Clue.h"
+#include "Engine/Texture2D.h"
 #include "ClueTypeImage.generated.h"
 
 /**
- * 
+ * This is a Clue Type that contains an image, it extends the Clue Data Asset and displays an image in the Clue Widget 
  */
 UCLASS()
 class CLUESYSTEM_API UClueTypeImage : public UPrimaryDataAsset_Clue
@@ -17,6 +18,7 @@ class CLUESYSTEM_API UClueTypeImage : public UPrimaryDataAsset_Clue
 
 	
 #pragma region Image
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Information")
 	TObjectPtr<UTexture2D> ClueImage;
@@ -24,10 +26,8 @@ protected:
 #pragma endregion
 
 public:
-
-
-	virtual bool ViewClue(UPanelWidget* ClueSwitcherSlot) override;
 	
-	UFUNCTION(BlueprintPure)
+	
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	TSoftObjectPtr<UTexture2D> GetClueImage() const {return ClueImage;}
 };

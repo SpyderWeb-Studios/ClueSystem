@@ -8,7 +8,7 @@
 #include "Engine/StreamableManager.h"
 #include "Widgets/Slots/ClueSlot.h"
 
-void UClueBranchManager::OnClueConfigLoaded() const
+void UClueBranchManager::OnClueConfigLoaded_Implementation() const
 {
 	// Log that the Clue Config was loaded.
 	UE_LOG(LogTemp, Warning, TEXT("Clue Config Loaded"));
@@ -85,6 +85,7 @@ void UClueBranchManager::OnClueConfigLoaded() const
 		UE_LOG(LogTemp, Warning, TEXT("Clue Config Not Loaded"));
 	}
 }
+
 
 void UClueBranchManager::NativeConstruct()
 {

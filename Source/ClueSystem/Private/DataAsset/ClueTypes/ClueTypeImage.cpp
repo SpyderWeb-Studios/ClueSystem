@@ -2,8 +2,3 @@
 
 
 #include "DataAsset/ClueTypes/ClueTypeImage.h"
-
-bool UClueTypeImage::ViewClue(UPanelWidget* ClueSwitcherSlot)
-{
-	return Super::ViewClue(ClueSwitcherSlot);
-}

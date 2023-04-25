@@ -33,7 +33,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 	// View the Collected Clue
 	//CollectedClue->ViewClue(ClueViewerPanel->GetSlots()[0]);
 
-	if(!IsValid(ClueViewerPanel))
+	if(!IsValid(ClueViewerSwitcher))
 	{
 		// Log to say that the Clue Viewer Panel is Invalid
 		UE_LOG(LogBlueprint, Error, TEXT("Clue Viewer Panel is Invalid"));
@@ -41,7 +41,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 	}
 
 
-	if(!CollectedClue->ViewClue(ClueViewerPanel))
+	if(!CollectedClue->ViewClue(ClueViewerSwitcher))
 	{
 		// Log to say that the Clue could not be viewed
 		UE_LOG(LogBlueprint, Error, TEXT("Clue could not be viewed"));

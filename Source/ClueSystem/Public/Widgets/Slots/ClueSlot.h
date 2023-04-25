@@ -8,7 +8,6 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "DataAsset/PrimaryDataAsset_Clue.h"
-#include "Libraries/EventDelegateLibrary.h"
 #include "ClueSlot.generated.h"
 
 /**
@@ -23,37 +22,35 @@ public:
 
 	virtual void NativeConstruct() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Slot")
 	void UpdateSlot(UPrimaryDataAsset_Clue* Clue);
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System")
 	TObjectPtr<UTextBlock> TextBlock_ClueName;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System")
 	TObjectPtr<UButton> Button_ViewClue;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System")
 	TObjectPtr<UImage> Image_ClueIcon;
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Clue System")
 	TSoftObjectPtr<UPrimaryDataAsset_Clue> ClueData;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Slot")
 		void SetNodeID(int ID) {NodeID = ID;}
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Slot")
 		int GetNodeID() const {return NodeID;}
 
 protected:
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Slot")
 		void ViewClue();
 	
 	UFUNCTION()
 		void OnDataLoaded();
 
-	FOnDataAssetLoaded OnDataAssetLoaded;
-
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
 	int NodeID;
 };
