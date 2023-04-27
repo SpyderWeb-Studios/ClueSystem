@@ -21,7 +21,7 @@ public:
 	// Sets default values for this actor's properties
 	AClueBase();
 
-	UFUNCTION(BlueprintCallable, Category="Clue System|Interaction")
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue System|Interaction")
 	virtual bool AttemptInteractionWithClue();
 	
 protected:
@@ -31,9 +31,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly, Category="Clue System|Clue")
 	TSoftObjectPtr<UPrimaryDataAsset_Clue> ClueDataAsset; 
 
-	UFUNCTION(BlueprintCallable, Category="Clue System")
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintNativeEvent, Category="Clue System")
 	void OnDataAssetLoaded();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue System")
 	void SendToClueManager(UPrimaryDataAsset_Clue* Clue);
 };
