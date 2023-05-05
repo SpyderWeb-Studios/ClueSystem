@@ -27,7 +27,8 @@ public class ClueSystem : ModuleRules
 			{
 				"Core",
 				"UMG",
-				"ClueHelper"
+				"Helper",
+				"NetCore"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -39,7 +40,7 @@ public class ClueSystem : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore", "ClueHelper",
+				"SlateCore", "Helper"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

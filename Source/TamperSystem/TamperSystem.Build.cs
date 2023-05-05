@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class ClueHelper : ModuleRules
+public class TamperSystem : ModuleRules
 {
-    public ClueHelper(ReadOnlyTargetRules Target) : base(Target)
+    public TamperSystem(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 

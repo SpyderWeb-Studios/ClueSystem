@@ -1,11 +1,9 @@
-﻿// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FClueHelperModule : public IModuleInterface
+class FTamperSystemModule : public IModuleInterface
 {
 public:
     virtual void StartupModule() override;

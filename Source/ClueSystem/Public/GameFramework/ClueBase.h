@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/PlayerClueManagerComponent.h"
 #include "GameFramework/Actor.h"
 #include "Libraries/EventDelegateLibrary.h"
 #include "ClueBase.generated.h"
@@ -23,6 +24,9 @@ public:
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue System|Interaction")
 	virtual bool AttemptInteractionWithClue();
+
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue System|Interaction")
+	virtual bool AttemptInteractionWithClueManager(UPlayerClueManagerComponent* ClueManager);
 	
 protected:
 	// Called when the game starts or when spawned
