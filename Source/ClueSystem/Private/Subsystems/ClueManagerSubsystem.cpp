@@ -5,7 +5,7 @@
 
 #include "ClueSystem.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
-#include "FunctionLibrary/MainDebugFunctionLibrary.h"
+#include "FunctionLibrary/DebugFunctionLibrary.h"
 
 
 UClueManagerSubsystem::UClueManagerSubsystem()
@@ -15,6 +15,25 @@ UClueManagerSubsystem::UClueManagerSubsystem()
 void UClueManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
+
+}
+
+void UClueManagerSubsystem::Deinitialize()
+{
+	Cleanup();
+	
+	Super::Deinitialize();
+}
+
+void UClueManagerSubsystem::Cleanup()
+{
+	ClueConfigTree.Empty();
+ 	CollectedClues.Empty();
+ 	ClueConfigRoot = nullptr;
+
+	OnClueSelected.Clear();
+	OnCollectedClue.Clear();
+	OnClueTrueCreated.Clear();
 	
 }
 
@@ -51,14 +70,6 @@ bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	return true;
 }
 
-void UClueManagerSubsystem::UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number)
-{	
-	// Log the Parent Branch, and the location of the clue with the number of clues in that location
-	UE_LOG(LogTemp, Warning, TEXT("Parent Branch: %s, Location: %s, Number: %d"), *ParentBranch, *location, Number);
-	NumberOfCluesInLocations.Add(location, Number);
-}
-
-
 void UClueManagerSubsystem::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root)
 {
 	// Iterate through the Root and recursively add the children to the Map
@@ -90,30 +101,6 @@ bool UClueManagerSubsystem::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck
 	}
 
 	return false;
-}
-
-int UClueManagerSubsystem::GetNumberOfCluesInLocation(FString Location) const
-{
-	// Recursively iterate through the Tree and count the number of Clues
-
-	for(const auto& node : ClueConfigTree)
-	{
-		if(node.Value.NodeName == Location)
-		{
-			return node.Value.Clues.Num();
-		}
-	}
-
-	return 0;
-}
-
-int UClueManagerSubsystem::GetNumberOfCollectedCluesInLocation(FString Location) const
-{
-	// Recursively iterate through the Tree and count the number of Clues
-
-	if(!CollectedClues.Contains(Location)) return 0;
-	
-	return CollectedClues[Location].CollectedClues.Num();
 }
 
 int UClueManagerSubsystem::GetIndexFromName(FString ClueName) const
@@ -194,6 +181,7 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		FClueTreeNode ChildNode = FClueTreeNode(Tree.Num());
 		ChildNode.NodeName = child->GetClueName();
 		child->SetClueIndex(Tree.Num());
+		child->SetClueLocation(Config->GetClueLocation());
 		
 		Tree.Add(Tree.Num(), ChildNode);
 	}

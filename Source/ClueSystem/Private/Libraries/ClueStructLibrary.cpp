@@ -2,6 +2,9 @@
 
 #include "Libraries/ClueStructLibrary.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
+#include "FunctionLibrary/DebugFunctionLibrary.h"
+
+
 
 int FClueTreeNode::FindChildRelativeIndex(const UPrimaryDataAsset_ClueConfig* Child)
 {

@@ -13,7 +13,7 @@
  * 
  */
 UCLASS()
-class CLUESYSTEM_API UClueManagerSubsystem : public UGameInstanceSubsystem
+class CLUESYSTEM_API UClueManagerSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
@@ -22,15 +22,17 @@ public:
 	UClueManagerSubsystem();
 	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	virtual void Deinitialize() override;
+
+	void Cleanup();
 	
+		
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
 	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
 	
-	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction, DeprecationMessage="Function has been deprecated, We are using the Tree System Now"), Category="Clue System|Clue Manager|Setup")
-	void UpdateNumberOfCluesInLocation(FString ParentBranch, FString location, int Number);
-
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
 	void SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root);
 
@@ -44,9 +46,6 @@ public:
 	FOnClueSelected OnClueSelected;
 
 	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
-	FOnClueImageLoaded OnClueImageLoaded;
-
-	UPROPERTY(BlueprintAssignable, Category="Clue System|Clue Manager|Events")
 	FOnUpdateClueTree OnClueTrueCreated;
 
 #pragma endregion
@@ -55,15 +54,6 @@ public:
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck);
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager|Utility")
-	TMap<FString, int> NumberOfCluesInLocations;
-
-	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
-	int GetNumberOfCluesInLocation(FString Location) const;
-
-	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
-	int GetNumberOfCollectedCluesInLocation(FString Location) const;
 
 	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager|Utility")
 	int GetIndexFromName(FString ClueName) const;
@@ -95,9 +85,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category="Clue System|Clue Manager")
 	TObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfigRoot;
-	
+
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
-	TMap<FString, FAreaClues> CollectedClues;
+    TMap<FString, FAreaClues> CollectedClues;
 	
 	// Tree Structure
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")

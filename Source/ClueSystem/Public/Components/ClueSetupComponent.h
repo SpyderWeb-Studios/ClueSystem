@@ -21,9 +21,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	// This will be a Root Node generated using a ClueConfig Data Asset
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System Configuration")
-	TObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfig;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	// This will be a Root Node generated using a ClueConfig Data Asset
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Clue System Configuration")
+	TWeakObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfig;
 		
 };

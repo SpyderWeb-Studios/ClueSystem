@@ -32,8 +32,50 @@ struct FAreaClues
 {
 	GENERATED_BODY()
 
+	FAreaClues()
+	{
+		CollectedClues.Empty();
+	}
+
+	FAreaClues(TMap<UPrimaryDataAsset_Clue*, bool> Clues)
+	{
+		CollectedClues = Clues;
+	}
+	
 	UPROPERTY(BlueprintReadOnly, Category="Clue System")
 	TMap<UPrimaryDataAsset_Clue*, bool> CollectedClues;
+};
+
+USTRUCT(BlueprintType)
+struct FReplicatedAreaClues
+{
+	GENERATED_BODY()
+
+	FReplicatedAreaClues()
+	{
+		AreaName = "";
+		CollectedClues.Empty();
+		bIsDirty = true;
+	}
+
+	FReplicatedAreaClues(FString Name, TArray<TWeakObjectPtr<UPrimaryDataAsset_Clue>> Clues)
+	{
+		AreaName = Name;
+		CollectedClues = Clues;
+		bIsDirty = true;
+	}
+
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
+	bool bIsDirty;
+
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
+	TArray<int> DirtyIndices;
+	
+	UPROPERTY(BlueprintReadOnly, Category="Clue System")
+	FString AreaName;	
+ 
+	UPROPERTY()
+	TArray<TWeakObjectPtr<UPrimaryDataAsset_Clue>> CollectedClues;
 };
 
 USTRUCT(BlueprintType)

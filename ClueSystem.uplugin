@@ -1,11 +1,11 @@
 {
-  "EngineVersion" : "5.1",
+  "EngineVersion": "5.1",
   "FileVersion": 3,
   "Version": 1,
   "VersionName": "1.0",
   "FriendlyName": "Clue System Plugin",
   "Description": "",
-  "Category": "Other",
+  "Category": "Gameplay",
   "CreatedBy": "SpyderWeb Studios Ltd",
   "CreatedByURL": "",
   "DocsURL": "",
@@ -22,7 +22,7 @@
       "LoadingPhase": "Default"
     },
     {
-      "Name": "ClueHelper",
+      "Name": "TamperSystem",
       "Type": "Runtime",
       "LoadingPhase": "Default"
     }

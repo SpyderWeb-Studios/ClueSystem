@@ -3,8 +3,7 @@
 
 #include "Components/ClueSetupComponent.h"
 
-#include "FunctionLibrary/MainDebugFunctionLibrary.h"
-#include "Enums/EDebuggingType.h"
+#include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 // Sets default values for this component's properties
@@ -23,14 +22,33 @@ void UClueSetupComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Setup", EDebuggingType::DT_Log);
-	
-	UClueManagerSubsystem* manager = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UClueManagerSubsystem>();
-
-	if(manager)
+	if(GetOwner()->HasAuthority())
 	{
-		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Manager Valid", EDebuggingType::DT_Log);
-		manager->SetClueConfigRoot(ClueConfig);
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup");
+	
+		UClueManagerSubsystem* manager = GetWorld()->GetSubsystem<UClueManagerSubsystem>();
+
+		if(manager && ClueConfig.IsValid())
+		{
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+			manager->SetClueConfigRoot(ClueConfig.Get());
+		}
 	}
+}
+
+void UClueSetupComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if(GetOwner()->HasAuthority())
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup Ending Play");
+
+		if(UClueManagerSubsystem* manager = GetWorld()->GetSubsystem<UClueManagerSubsystem>())
+		{
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+			manager->Cleanup();;
+		}
+	}
+	
+	Super::EndPlay(EndPlayReason);
 }
 

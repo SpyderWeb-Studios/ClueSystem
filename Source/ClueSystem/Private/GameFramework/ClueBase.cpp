@@ -4,6 +4,7 @@
 #include "GameFramework/ClueBase.h"
 
 #include "Engine/StreamableManager.h"
+#include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
 // Sets default values
@@ -28,6 +29,30 @@ bool AClueBase::AttemptInteractionWithClue()
 	FStreamableDelegate::CreateUObject(this, &AClueBase::OnDataAssetLoaded), 0, false);
 	
 	return true;
+}
+
+bool AClueBase::AttemptInteractionWithClueManager(UPlayerClueManagerComponent* ClueManager)
+{
+	if(GetNetMode() >= NM_Client)
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "AttemptInteractionWithClueManager called on Client");
+		return false;
+	}
+
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Interacting");
+
+	TWeakObjectPtr<UPrimaryDataAsset_Clue> clue =  ClueDataAsset.LoadSynchronous();
+
+	if(clue.IsValid() && IsValid(ClueManager))
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Collected");
+		if(ClueManager->CollectClueLocally(clue.Get()))
+		{
+			Destroy();
+			return true;
+		}
+	}
+	return false;
 }
 
 // Called when the game starts or when spawned
@@ -64,7 +89,7 @@ void AClueBase::SendToClueManager(UPrimaryDataAsset_Clue* Clue)
 		return;
 	}
 	
-	UClueManagerSubsystem* ClueManager = GetGameInstance()->GetSubsystem<UClueManagerSubsystem>();
+	UClueManagerSubsystem* ClueManager = GetWorld()->GetSubsystem<UClueManagerSubsystem>();
 	if(!ClueManager)
 	{
 		// Log Error
