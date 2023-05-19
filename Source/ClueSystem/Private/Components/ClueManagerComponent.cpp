@@ -1,36 +1,22 @@
-// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Subsystems/ClueManagerSubsystem.h"
+#include "Components/ClueManagerComponent.h"
 
-#include "ClueSystem.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 
-
-UClueManagerSubsystem::UClueManagerSubsystem()
+// Sets default values for this component's properties
+UClueManagerComponent::UClueManagerComponent()
 {
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
+
+	// ...
 }
 
-void UClueManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
-{
-	Super::Initialize(Collection);
-
-}
-
-bool UClueManagerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
-{
-	return false;
-}
-
-void UClueManagerSubsystem::Deinitialize()
-{
-	Cleanup();
-	
-	Super::Deinitialize();
-}
-
-void UClueManagerSubsystem::Cleanup()
+void UClueManagerComponent::Cleanup()
 {
 	ClueConfigTree.Empty();
  	CollectedClues.Empty();
@@ -42,13 +28,13 @@ void UClueManagerSubsystem::Cleanup()
 	
 }
 
-bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
+bool UClueManagerComponent::CollectClue(UPrimaryDataAsset_Clue* Clue)
 {
-	UE_LOG(LogClue, Display, TEXT("Attempting to Collect Clue"));
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Attempting to Collect Clue");
 	
 	if(!Clue->IsValidLowLevel()) return false;
 	
-	UE_LOG(LogClue, Display, TEXT("Collecting Clue: %s"), *Clue->GetClueName());
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Collecting Clue: " +Clue->GetClueName());
 	FAreaClues AreaClues;
 	
 	// If the Map has the Enum already, then we need to save a reference to the current value
@@ -57,25 +43,25 @@ bool UClueManagerSubsystem::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	// If the Map has the Enum already, then we need to save a reference to the current value
 		AreaClues = CollectedClues[Clue->GetClueLocation()];
 		
-		UE_LOG(LogClue, Display, TEXT("Clue Location already in Map"));
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Location already in Map");
 	}
 
 	// If it already exists then Return False
 	if(AreaClues.CollectedClues.Contains(Clue)) return false;
 
-	UE_LOG(LogClue, Display, TEXT("Clue doesn't already exist in Map"), *Clue->GetClueName());
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue doesn't already exist in Map" +Clue->GetClueName());
 	
 	AreaClues.CollectedClues.Add(Clue, true);
 	CollectedClues.Add(Clue->GetClueLocation(), AreaClues);
 	
-	UE_LOG(LogClue, Display, TEXT("Clue Successfully Added"), *Clue->GetClueName());
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Added" +Clue->GetClueName());
 
 	OnCollectedClue.Broadcast(Clue);
 	
 	return true;
 }
 
-void UClueManagerSubsystem::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root)
+void UClueManagerComponent::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root)
 {
 	// Iterate through the Root and recursively add the children to the Map
 	ClueConfigRoot = Root;
@@ -86,16 +72,16 @@ void UClueManagerSubsystem::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root
 	// Iterate through the Map and Log the Tree
 	for(const auto& node : ClueConfigTree)
 	{
-		UE_LOG(LogClue, Display, TEXT("Node: %d with Name: [%s]"), node.Key, *node.Value.NodeName);
-		UE_LOG(LogClue, Display, TEXT("Branches: %d"), node.Value.ChildrenNodes.Num());
-		UE_LOG(LogClue, Display, TEXT("Clues: %d"), node.Value.Clues.Num());
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Node: ["+FString::FromInt(node.Key)+"] with Name: ["+node.Value.NodeName+"]");
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branches: ["+ FString::FromInt(node.Value.ChildrenNodes.Num())+"]");
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clues: ["+FString::FromInt(node.Value.Clues.Num())+"])");
 	}
 
 	OnClueTrueCreated.Broadcast(FClueTree(ClueConfigTree));
 	
 }
 
-bool UClueManagerSubsystem::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck)
+bool UClueManagerComponent::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck)
 {
 
 	if(!ClueToCheck) return false;
@@ -108,7 +94,7 @@ bool UClueManagerSubsystem::HasCollectedClue(UPrimaryDataAsset_Clue* ClueToCheck
 	return false;
 }
 
-int UClueManagerSubsystem::GetIndexFromName(FString ClueName) const
+int UClueManagerComponent::GetIndexFromName(FString ClueName) const
 {
 	// Iterate through the Tree and find the Node with the Name
 	for(const auto& node : ClueConfigTree)
@@ -122,7 +108,7 @@ int UClueManagerSubsystem::GetIndexFromName(FString ClueName) const
 	return -1;
 }
 
-int UClueManagerSubsystem::GetParentIndexFromIndex(int Index) const
+int UClueManagerComponent::GetParentIndexFromIndex(int Index) const
 {
 	// Iterate through the Tree and find the Node with the Name
 	for(const auto& node : ClueConfigTree)
@@ -137,7 +123,7 @@ int UClueManagerSubsystem::GetParentIndexFromIndex(int Index) const
 	return -1;
 }
 
-int UClueManagerSubsystem::GetParentIndexFromName(FString ClueName) const
+int UClueManagerComponent::GetParentIndexFromName(FString ClueName) const
 {
 	// Iterate through the Tree and find the Node with the Name
 	for(const auto& node : ClueConfigTree)
@@ -151,13 +137,13 @@ int UClueManagerSubsystem::GetParentIndexFromName(FString ClueName) const
 	return -1;
 }
 
-TMap<int, FClueTreeNode> UClueManagerSubsystem::GetClueTree() const
+TMap<int, FClueTreeNode> UClueManagerComponent::GetClueTree() const
 {
 	return ClueConfigTree;
 }
 
 
-void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config,
+void UClueManagerComponent::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config,
                                                   TMap<int, FClueTreeNode>& Tree)
 {
 	if(!Config) return;
@@ -173,14 +159,14 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		if(!IsValid(child))
 		{
 			// log error
-			UE_LOG(LogClue, Error, TEXT("Clue is not valid"));
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Clue is not valid");
 			continue;
 		}
 		
 		if(child->GetClueIndex() > 0 && Tree.Contains(child->GetClueIndex()))
 		{
 			// Log Warning
-			UE_LOG(LogClue, Warning, TEXT("Clue [%s] already exists in Tree. Clue Index: [%d]"), *child->GetClueName(), child->GetClueIndex());
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, FString::Printf(TEXT("Clue [%s] already exists in Tree. Clue Index: [%d]"), *child->GetClueName(), child->GetClueIndex()));
 		}
 		
 		FClueTreeNode ChildNode = FClueTreeNode(Tree.Num());
@@ -198,13 +184,13 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		if(!IsValid(child))
 		{
 			// log error
-			UE_LOG(LogClue, Error, TEXT("Branch is not valid"));
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branch is not valid");
 			continue;
 		}
 		if(child->GetIndex() > 0 && Tree.Contains(child->GetIndex()))
 		{
 			// Log Warning
-			UE_LOG(LogClue, Warning, TEXT("Branch [%s] already exists in Tree. Branch Index: [%d]"), *child->GetClueLocation(), child->GetIndex());
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Branch ["+child->GetClueLocation()+"] already exists in Tree. Branch Index: ["+FString::FromInt(child->GetIndex())+"]");
 			
 			continue;
 		}
@@ -214,7 +200,7 @@ void UClueManagerSubsystem::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 
 }
 
-TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromIndex(int Index) const
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerComponent::GetClueConfigFromIndex(int Index) const
 {
 	if(ClueConfigTree.Contains(GetParentIndexFromIndex(Index)))
 	{
@@ -230,12 +216,12 @@ TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfi
 	return nullptr;
 }
 
-TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromName(FString ClueName) const
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerComponent::GetClueConfigFromName(FString ClueName) const
 {
 	return GetClueConfigFromIndex(ClueConfigTree[GetIndexFromName(ClueName)].NodeID);
 }
 
-TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromParentIndex(int ParentIndex, FString ClueLocation) const
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerComponent::GetClueConfigFromParentIndex(int ParentIndex, FString ClueLocation) const
 {
 	// Iterate through the Tree and find the Node with the Name
 	for(const auto& node : ClueConfigTree)
@@ -249,7 +235,7 @@ TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfi
 	return nullptr;
 }
 
-TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerSubsystem::GetClueConfigFromParentName(
+TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerComponent::GetClueConfigFromParentName(
 	FString ParentName, FString ClueLocation) const
 {
 	return GetClueConfigFromParentIndex(GetIndexFromName(ParentName), ClueLocation);

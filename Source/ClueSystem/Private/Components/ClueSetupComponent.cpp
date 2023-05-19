@@ -3,7 +3,9 @@
 
 #include "Components/ClueSetupComponent.h"
 
+#include "ClueManagerComponent.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
+#include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 // Sets default values for this component's properties
@@ -25,13 +27,16 @@ void UClueSetupComponent::BeginPlay()
 	if(GetOwner()->HasAuthority())
 	{
 		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup");
-	
-		UClueManagerSubsystem* manager = GetWorld()->GetSubsystem<UClueManagerSubsystem>();
 
-		if(manager && ClueConfig.IsValid())
+		// Get the Game Mode and find the Clue Manager Component
+		if(const AGameModeBase* gameMode = UGameplayStatics::GetGameMode(GetWorld()))
 		{
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
-			manager->SetClueConfigRoot(ClueConfig.Get());
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
+			if(UClueManagerComponent* manager = gameMode->FindComponentByClass<UClueManagerComponent>())
+			{
+				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+				manager->SetClueConfigRoot(ClueConfig.Get());
+			}
 		}
 	}
 }
@@ -40,12 +45,17 @@ void UClueSetupComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if(GetOwner()->HasAuthority())
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup Ending Play");
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue End Play");
 
-		if(UClueManagerSubsystem* manager = GetWorld()->GetSubsystem<UClueManagerSubsystem>())
+		// Get the Game Mode and find the Clue Manager Component
+		if(const AGameModeBase* gameMode = UGameplayStatics::GetGameMode(GetWorld()))
 		{
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
-			manager->Cleanup();;
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
+			if(UClueManagerComponent* manager = gameMode->FindComponentByClass<UClueManagerComponent>())
+			{
+				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+				manager->Cleanup();
+			}
 		}
 	}
 	

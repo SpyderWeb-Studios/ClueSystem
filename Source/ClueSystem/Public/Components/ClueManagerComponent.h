@@ -1,33 +1,30 @@
-// Copyright 2022-2023 Spyderweb Studios Ltd. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Libraries/ClueStructLibrary.h"
+#include "Components/ActorComponent.h"
 #include "Libraries/EventDelegateLibrary.h"
+#include "ClueManagerComponent.generated.h"
 
-#include "Subsystems/GameInstanceSubsystem.h"
-#include "ClueManagerSubsystem.generated.h"
+
+class UPrimaryDataAsset_Clue;
+struct FClueTreeNode;
+struct FAreaClues;
+class UPrimaryDataAsset_ClueConfig;
 
 /**
  * 
  */
-UCLASS()
-class CLUESYSTEM_API UClueManagerSubsystem : public UWorldSubsystem
+UCLASS( ClassGroup=(Clue), BlueprintType, meta=(BlueprintSpawnableComponent) )
+class CLUESYSTEM_API UClueManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
-
-	UClueManagerSubsystem();
-	
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
-
-	virtual void Deinitialize() override;
-
-	void Cleanup();
+public:	
+	// Sets default values for this component's properties
+	UClueManagerComponent();
+void Cleanup();
 	
 		
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
@@ -95,4 +92,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
 	TMap<int, FClueTreeNode> ClueConfigTree;
 
+
+		
 };

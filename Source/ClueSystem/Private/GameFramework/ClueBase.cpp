@@ -48,7 +48,6 @@ bool AClueBase::AttemptInteractionWithClueManager(UPlayerClueManagerComponent* C
 		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Collected");
 		if(ClueManager->CollectClueLocally(clue.Get()))
 		{
-			Destroy();
 			return true;
 		}
 	}
