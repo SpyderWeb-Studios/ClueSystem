@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category="Clue System|Inspecting")
 	bool StopViewingClue(UWidgetSwitcher* ClueSwitcherSlot);
 
+
+	virtual bool IsSupportedForNetworking() const override;
+
 #pragma region Getters
 
 	UFUNCTION(BlueprintPure, Category="Clue System|Information")

@@ -105,3 +105,8 @@ bool UPrimaryDataAsset_Clue::ViewClue(UWidgetSwitcher* ClueSwitcherSlot)
 	
 	return false;
 }
+
+bool UPrimaryDataAsset_Clue::IsSupportedForNetworking() const
+{
+	return true;
+}

@@ -12,7 +12,7 @@ void UClueSlot::NativeConstruct()
 
 	Button_ViewClue->OnPressed.AddUniqueDynamic(this, &UClueSlot::ViewClue);
 
-	if(UClueManagerSubsystem* ClueManagerSubsystem =GetWorld()->GetSubsystem<UClueManagerSubsystem>())
+	if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
 	{
 		ClueManagerSubsystem->OnCollectedClue.AddUniqueDynamic(this, &UClueSlot::UpdateSlot);
 	}
@@ -48,11 +48,11 @@ void UClueSlot::ViewClue()
 void UClueSlot::OnDataLoaded()
 {
 	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Loaded");
-	if(ClueData.Get() && GetWorld()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
+	if(ClueData.Get() && GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
 	{
 		
 		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid");
-		GetWorld()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
+		GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
 		
 	}
 }

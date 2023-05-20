@@ -66,6 +66,21 @@ bool UPlayerClueManagerComponent::CollectClueLocally(UPrimaryDataAsset_Clue* Clu
 	return false;
 }
 
+bool UPlayerClueManagerComponent::HasCollectedClue(UPrimaryDataAsset_Clue* Clue)
+{
+	// Check if the clue is in the fast array
+	if(CollectedClues.Contains(Clue->GetClueLocation()))
+	{
+		const int ClueIndex = *CollectedClues.Find(Clue->GetClueLocation());
+		if(ReplicatedClues.Items[ClueIndex].AreaName == Clue->GetClueLocation() && ReplicatedClues.Items[ClueIndex].CollectedClues.Contains(Clue))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 
 // Called when the game starts
 void UPlayerClueManagerComponent::BeginPlay()
@@ -73,7 +88,27 @@ void UPlayerClueManagerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+
+	Client_SetupClueSubsystem();
 	
+}
+
+void UPlayerClueManagerComponent::Client_SetupClueSubsystem_Implementation()
+{
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Setting up Clue Subsystem");
+
+	// Get the Local Player and the Clue Manager Subsystem
+	if(!IsValid(GetLocalPlayerFromOwner())) return;
+	
+	UClueManagerSubsystem* ClueManagerSubsystem = GetLocalPlayerFromOwner()->GetSubsystem<UClueManagerSubsystem>();
+	if(IsValid(ClueManagerSubsystem))
+	{
+		ClueManagerSubsystem->SetPlayerClueManagerComponent(this);
+	}
+	else
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Subsystem is Invalid");
+	}
 }
 
 	

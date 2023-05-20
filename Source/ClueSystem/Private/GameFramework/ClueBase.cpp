@@ -3,8 +3,11 @@
 
 #include "GameFramework/ClueBase.h"
 
+#include "Components/ClueManagerComponent.h"
 #include "Engine/StreamableManager.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
+#include "GameFramework/GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
 // Sets default values
@@ -87,8 +90,11 @@ void AClueBase::SendToClueManager(UPrimaryDataAsset_Clue* Clue)
 		UE_LOG(LogNet, Error, TEXT("SendToClueManager called on Client"));
 		return;
 	}
+
+
+	UClueManagerComponent* ClueManager = Cast<UClueManagerComponent>(UGameplayStatics::GetGameMode(this)->GetComponentByClass(UClueManagerComponent::StaticClass()));
 	
-	UClueManagerSubsystem* ClueManager = GetWorld()->GetSubsystem<UClueManagerSubsystem>();
+	// UClueManagerSubsystem* ClueManager = GetWorld()->GetSubsystem<UClueManagerSubsystem>();
 	if(!ClueManager)
 	{
 		// Log Error

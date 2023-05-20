@@ -12,7 +12,7 @@ void UClueViewer::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if(UClueManagerSubsystem* ClueManagerSubsystem = GetWorld()->GetSubsystem<UClueManagerSubsystem>())
+	if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
 	{
 		ClueManagerSubsystem->OnClueSelected.AddUniqueDynamic(this, &UClueViewer::OnClueSelected);
 	}
@@ -60,7 +60,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue has additional information: " +CollectedClue->GetClueName());
 
 		// Get the Clue Manager Subsystem
-		if(UClueManagerSubsystem* ClueManagerSubsystem = GetWorld()->GetSubsystem<UClueManagerSubsystem>())
+		if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
 		{
 			// For every piece of Additional Information, check if the reliant Clue has been collected
 			for(auto Information : CollectedClue->GetAdditionalInformation())

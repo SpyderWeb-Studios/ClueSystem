@@ -14,7 +14,6 @@
 
 class UPrimaryDataAsset_Clue;
 
-
 UCLASS(ClassGroup=("Clue Management"), meta=(BlueprintSpawnableComponent) )
 class CLUESYSTEM_API UPlayerClueManagerComponent : public UActorComponent
 {
@@ -35,12 +34,27 @@ public:
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue Management")
 	bool CollectClueLocally(UPrimaryDataAsset_Clue* Clue);
 
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue Management")
+	bool HasCollectedClue(UPrimaryDataAsset_Clue* Clue);
+
 	UPROPERTY(BlueprintAssignable, Category="Clue Manager|Events")
 	FOnCollectedClue OnCollectedClueLocally;
 	
 	UPROPERTY(BlueprintAssignable, Category="Clue Manager|Events")
 	FOnClueSelected OnClueSelectedLocally;
 
+
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	ULocalPlayer* GetLocalPlayerFromOwner() const {return OwningLocalPlayer.Get();}
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void SetLocalPlayerFromOwner(APlayerController* PlayerController)
+	{
+		if(IsValid(PlayerController))
+		{
+			OwningLocalPlayer = PlayerController->GetLocalPlayer();
+		}
+	}
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -53,5 +67,10 @@ protected:
 
 	UPROPERTY(Replicated)
 	FReplicatedAreaClueArray ReplicatedClues;
+
+
+	UFUNCTION(Client, Reliable, Category="Clue Management")
+	void Client_SetupClueSubsystem();
 	
+	TWeakObjectPtr<ULocalPlayer> OwningLocalPlayer;
 };

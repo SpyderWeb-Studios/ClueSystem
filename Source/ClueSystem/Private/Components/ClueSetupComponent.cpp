@@ -3,7 +3,7 @@
 
 #include "Components/ClueSetupComponent.h"
 
-#include "ClueManagerComponent.h"
+#include "Components/ClueManagerComponent.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"

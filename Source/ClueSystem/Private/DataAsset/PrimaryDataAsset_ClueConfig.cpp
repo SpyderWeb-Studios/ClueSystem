@@ -18,11 +18,3 @@ void UPrimaryDataAsset_ClueConfig::UpdateClueIndices(FString Location)
 		
 	}
 }
-
-FClueTree UPrimaryDataAsset_ClueConfig::GetClueTree() const
-{
-	if(!IsValid(UGameplayStatics::GetGameInstance(this))) return FClueTree();
-	if(!IsValid(GetWorld()->GetSubsystem<UClueManagerSubsystem>())) return FClueTree();
-		
-	return GetWorld()->GetSubsystem<UClueManagerSubsystem>()->GetClueTree();
-}
