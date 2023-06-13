@@ -7,7 +7,7 @@
 #include "ClueFastArray.generated.h"
 
 /** Step 1: Make your struct inherit from FFastArraySerializerItem */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FReplicatedClueItem : public FFastArraySerializerItem
 {
 	GENERATED_BODY()
@@ -18,10 +18,10 @@ struct FReplicatedClueItem : public FFastArraySerializerItem
 	}
  
 	// Your data:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Clue System")
 	FString AreaName;	
  
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category="Clue System")
 	TArray<TWeakObjectPtr<UPrimaryDataAsset_Clue>> CollectedClues;
  
 	/** 
@@ -47,7 +47,7 @@ struct FReplicatedClueItem : public FFastArraySerializerItem
 };
  
 /** Step 2: You MUST wrap your TArray in another struct that inherits from FFastArraySerializer */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FReplicatedAreaClueArray: public FFastArraySerializer
 {
 	GENERATED_BODY()

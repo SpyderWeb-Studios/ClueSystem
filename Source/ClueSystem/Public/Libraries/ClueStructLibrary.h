@@ -42,7 +42,7 @@ struct FAreaClues
 		CollectedClues = Clues;
 	}
 	
-	UPROPERTY(BlueprintReadOnly, Category="Clue System")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Clue System")
 	TMap<UPrimaryDataAsset_Clue*, bool> CollectedClues;
 };
 
@@ -134,15 +134,15 @@ struct FClueTreeNode
 
 
 
-	UPROPERTY(EditDefaultsOnly, Category="Clue System")
+	UPROPERTY(EditAnywhere, Category="Clue System")
 	int NodeID;
 
-	UPROPERTY(EditDefaultsOnly, Category="Clue System")
+	UPROPERTY(EditAnywhere, Category="Clue System")
 	FString NodeName;
 
-	UPROPERTY(EditDefaultsOnly, Category="Clue System")
+	UPROPERTY(EditAnywhere, Category="Clue System")
 	TArray<UPrimaryDataAsset_ClueConfig*> ChildrenNodes;
 
-	UPROPERTY(EditDefaultsOnly, Category="Clue System")
+	UPROPERTY(EditAnywhere, Category="Clue System")
 	TArray<UPrimaryDataAsset_Clue*> Clues;
 };

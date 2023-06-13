@@ -26,7 +26,7 @@ public:
 	UClueManagerComponent();
 void Cleanup();
 	
-		
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
@@ -85,11 +85,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Clue System|Clue Manager")
 	TObjectPtr<UPrimaryDataAsset_ClueConfig> ClueConfigRoot;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Clue System|Clue Manager")
     TMap<FString, FAreaClues> CollectedClues;
 	
 	// Tree Structure
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Clue Manager")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Clue System|Clue Manager")
 	TMap<int, FClueTreeNode> ClueConfigTree;
 
 

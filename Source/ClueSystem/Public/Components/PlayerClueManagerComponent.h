@@ -65,12 +65,18 @@ protected:
 	 */
 	TMap<FString, int> CollectedClues;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="Clue Management")
 	FReplicatedAreaClueArray ReplicatedClues;
 
 
 	UFUNCTION(Client, Reliable, Category="Clue Management")
 	void Client_SetupClueSubsystem();
+
+	UFUNCTION(Server,Reliable, Category="Clue Management")
+	void Server_SetupClueManager();
+
+	UFUNCTION(BlueprintCallable)
+	void OnGlobalClueCollected(UPrimaryDataAsset_Clue* Clue);
 	
 	TWeakObjectPtr<ULocalPlayer> OwningLocalPlayer;
 };

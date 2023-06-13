@@ -4,6 +4,7 @@
 #include "Components/PlayerClueManagerComponent.h"
 
 #include "FunctionLibrary/DebugFunctionLibrary.h"
+#include "Interfaces/PlayerClueInterface.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
 // Sets default values for this component's properties
@@ -90,7 +91,46 @@ void UPlayerClueManagerComponent::BeginPlay()
 	// ...
 
 	Client_SetupClueSubsystem();
+	Server_SetupClueManager();
 	
+}
+
+void UPlayerClueManagerComponent::OnGlobalClueCollected(UPrimaryDataAsset_Clue* Clue)
+{
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "OnGlobalClueCollected Called");
+	
+	if(CollectClueLocally(Clue))
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue ["+ Clue->GetClueName() + "] at Location ["+ Clue->GetClueLocation() +"] was Collected Locally");
+	}
+	else
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue ["+ Clue->GetClueName() + "] at Location ["+ Clue->GetClueLocation() +"] was not Collected Locally");
+	}
+}
+
+void UPlayerClueManagerComponent::Server_SetupClueManager_Implementation()
+{
+	if(!IsValid(GetOwner())) return;
+
+	// Check that the Owner implements the IClueManagerInterface
+	if(GetOwner()->Implements<UPlayerClueInterface>())
+	{
+		UClueManagerComponent* ClueManagerComponent = IPlayerClueInterface::Execute_GetClueManager(GetOwner());
+		if(IsValid(ClueManagerComponent))
+		{
+			ClueManagerComponent->OnCollectedClue.AddUniqueDynamic(this, &UPlayerClueManagerComponent::OnGlobalClueCollected);
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Component is Valid, OnCollectedClue Event was Bound");
+		}
+		else
+		{
+			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Component is Invalid");
+		}
+	}
+	else
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Owner does not implement IClueManagerInterface");
+	}
 }
 
 void UPlayerClueManagerComponent::Client_SetupClueSubsystem_Implementation()
