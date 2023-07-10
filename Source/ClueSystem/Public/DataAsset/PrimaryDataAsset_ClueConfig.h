@@ -42,6 +42,13 @@ public:
 	UFUNCTION(BlueprintPure, Category="ClueSystem|ClueBranchManager")
 	TSubclassOf<UClueBranchManager> GetClueBranchManagerClass() const { return ClueBranchManagerClass; }
 
+
+UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+	bool AddClue(UPrimaryDataAsset_Clue* Clue);
+
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+	bool RemoveClue(UPrimaryDataAsset_Clue* Clue);
+	
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category="ClueSystem")

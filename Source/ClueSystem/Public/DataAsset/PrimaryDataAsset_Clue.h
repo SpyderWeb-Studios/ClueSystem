@@ -33,6 +33,7 @@ public:
 
 	virtual bool IsSupportedForNetworking() const override;
 
+
 #pragma region Getters
 
 	UFUNCTION(BlueprintPure, Category="Clue System|Information")
@@ -60,12 +61,16 @@ public:
 	UStaticMesh* GetClueDisplayMesh() const {return ClueDisplayMesh;}
 
 	UFUNCTION(BlueprintPure, Category="Clue System|Information")
+	TSubclassOf<AActor> GetClueActorClass() const {return ClueDisplayActor;}
+
+	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	TSubclassOf<UUserWidget> GetClueWidgetClass() const {return ClueWidgetClass;}
 
 	UFUNCTION(BlueprintPure, Category="Clue System|Information")
 	UUserWidget* GetClueWidgetInstance() const {return ClueWidgetInstance;}
 
-#pragma endregion 
+#pragma endregion
+
 
 #pragma region Setters
 	
@@ -94,6 +99,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Basic")
 	TObjectPtr<UStaticMesh> ClueDisplayMesh;
 
+	
+	UPROPERTY(EditDefaultsOnly, Category="Basic")
+	TSubclassOf<AActor> ClueDisplayActor;
+	
 	/**
 	 * @brief The Widget responsible for Inspecting the Clue
 	 */

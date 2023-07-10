@@ -2,7 +2,7 @@
 
 
 #include "GameFramework/ClueBase.h"
-
+#include "ClueSystem.h"
 #include "Components/ClueManagerComponent.h"
 #include "Engine/StreamableManager.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
@@ -43,7 +43,7 @@ bool AClueBase::AttemptInteractionWithClueManager(UPlayerClueManagerComponent* C
 	}
 
 	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Interacting");
-
+	
 	TWeakObjectPtr<UPrimaryDataAsset_Clue> clue =  ClueDataAsset.LoadSynchronous();
 
 	if(clue.IsValid() && IsValid(ClueManager))
@@ -55,6 +55,18 @@ bool AClueBase::AttemptInteractionWithClueManager(UPlayerClueManagerComponent* C
 		}
 	}
 	return false;
+}
+
+UPrimaryDataAsset_Clue* AClueBase::GetClueDataAsset_Implementation()
+{
+	return nullptr;
+}
+
+bool AClueBase::SetClueDataAsset_Implementation(UPrimaryDataAsset_Clue* NewClueDataAsset)
+{
+	UE_LOG(LogClue, Display, TEXT("Setting Data Asset [%s]"), *GetNameSafe(NewClueDataAsset));
+	ClueDataAsset = NewClueDataAsset;
+	return true;
 }
 
 // Called when the game starts or when spawned

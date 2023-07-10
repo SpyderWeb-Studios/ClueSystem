@@ -52,7 +52,7 @@ struct FReplicatedAreaClueArray: public FFastArraySerializer
 {
 	GENERATED_BODY()
  
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TArray<FReplicatedClueItem>	Items;	/** Step 3: You MUST have a TArray named Items of the struct you made in step 1. */
  
 	/** Step 4: Copy this, replace example with your names */

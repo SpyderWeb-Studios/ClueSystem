@@ -3,6 +3,7 @@
 
 #include "Components/PlayerClueManagerComponent.h"
 
+#include "ClueSystem.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Interfaces/PlayerClueInterface.h"
 #include "Subsystems/ClueManagerSubsystem.h"
@@ -121,6 +122,12 @@ void UPlayerClueManagerComponent::Server_SetupClueManager_Implementation()
 		{
 			ClueManagerComponent->OnCollectedClue.AddUniqueDynamic(this, &UPlayerClueManagerComponent::OnGlobalClueCollected);
 			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Component is Valid, OnCollectedClue Event was Bound");
+
+			for(UPrimaryDataAsset_Clue* Collected: ClueManagerComponent->GetCollectedClues())
+			{
+				UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Adding Collected: [" + GetNameSafe(Collected) +"]"));
+				CollectClueLocally(Collected);
+			}
 		}
 		else
 		{

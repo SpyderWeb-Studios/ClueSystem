@@ -22,13 +22,12 @@ class CLUESYSTEM_API UClueManagerComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UClueManagerComponent();
+
 void Cleanup();
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
 	bool CollectClue(UPrimaryDataAsset_Clue* Clue);
-	
+		
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Clue System|Clue Manager|Setup")
 	void CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* Config, TMap<int, FClueTreeNode>& Tree);
 	
@@ -78,6 +77,9 @@ void Cleanup();
 	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager|Utility")
 	TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> GetClueConfigFromParentName(FString ParentName, FString ClueLocation) const;
 
+
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintPure, Category="Clue System|Clue Manager|Utility")
+	TArray<UPrimaryDataAsset_Clue*> GetCollectedClues();
 #pragma endregion 
 
 protected:

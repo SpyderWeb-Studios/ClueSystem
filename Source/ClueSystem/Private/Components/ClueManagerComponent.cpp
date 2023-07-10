@@ -3,18 +3,11 @@
 
 #include "Components/ClueManagerComponent.h"
 
+#include "ClueSystem.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 
-// Sets default values for this component's properties
-UClueManagerComponent::UClueManagerComponent()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
 
 void UClueManagerComponent::Cleanup()
 {
@@ -32,7 +25,7 @@ bool UClueManagerComponent::CollectClue(UPrimaryDataAsset_Clue* Clue)
 {
 	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Attempting to Collect Clue");
 	
-	if(!Clue->IsValidLowLevel()) return false;
+	if(!IsValid(Clue)) return false;
 	
 	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Collecting Clue: " +Clue->GetClueName());
 	FAreaClues AreaClues;
@@ -60,6 +53,7 @@ bool UClueManagerComponent::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	
 	return true;
 }
+
 
 void UClueManagerComponent::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root)
 {
@@ -239,4 +233,17 @@ TSoftObjectPtr<UPrimaryDataAsset_ClueConfig> UClueManagerComponent::GetClueConfi
 	FString ParentName, FString ClueLocation) const
 {
 	return GetClueConfigFromParentIndex(GetIndexFromName(ParentName), ClueLocation);
+}
+
+TArray<UPrimaryDataAsset_Clue*> UClueManagerComponent::GetCollectedClues()
+{
+	TArray<UPrimaryDataAsset_Clue*> Collected;
+
+	for(const auto& collectedClue : CollectedClues)
+	{
+		TArray<UPrimaryDataAsset_Clue*> temp;
+		collectedClue.Value.CollectedClues.GetKeys(temp);
+		Collected.Append(temp);
+	}
+	return Collected;
 }
