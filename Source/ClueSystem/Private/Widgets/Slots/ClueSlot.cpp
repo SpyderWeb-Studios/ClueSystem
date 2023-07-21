@@ -22,9 +22,13 @@ void UClueSlot::UpdateSlot(UPrimaryDataAsset_Clue* Clue)
 {
 	UDebugFunctionLibrary::DebugLogWithObject(this, "Updating Slot ["+FString::FromInt(GetNodeID()) +"]");
 	
-	if(!Clue || Clue->GetClueIndex() != GetNodeID()) return;
+	if(!IsValid(Clue) || Clue->GetClueIndex() != GetNodeID())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Clue is invalid or [%d] does not match Slot Index [%d]"), Clue->GetClueIndex(), GetNodeID());
+		return;
+	}
 	
-	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset With Index ["+ FString::FromInt(Clue->GetClueIndex()) +"] is Valid");
+	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset [" +Clue->GetClueName()+"] With Index ["+ FString::FromInt(Clue->GetClueIndex()) +"] is Valid");
 
 	TextBlock_ClueName->SetText(FText::FromString(Clue->GetClueName()));
 
@@ -50,9 +54,18 @@ void UClueSlot::OnDataLoaded()
 	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Loaded");
 	if(ClueData.Get() && GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
 	{
-		
 		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid");
 		GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
-		
+	}
+	else
+	{
+		if(!ClueData.Get())
+		{
+			UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Invalid");
+		}
+		else
+		{
+			UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid but not Collected");
+		}
 	}
 }

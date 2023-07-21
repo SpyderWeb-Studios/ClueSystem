@@ -9,6 +9,10 @@ void FReplicatedClueItem::PreReplicatedRemove(const FReplicatedAreaClueArray& In
 void FReplicatedClueItem::PostReplicatedAdd(const FReplicatedAreaClueArray& InArraySerializer)
 {
 	UDebugFunctionLibrary::DebugLog("PostReplicatedAdd: " + AreaName);
+	UDebugFunctionLibrary::DebugLog("PostReplicatedAdd: " + FString::FromInt(CollectedClues.Num()));
+
+	InArraySerializer.OnClueAddReplicated.Broadcast(*this);
+
 }
 
 void FReplicatedClueItem::PostReplicatedChange(const FReplicatedAreaClueArray& InArraySerializer)

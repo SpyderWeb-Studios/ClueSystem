@@ -3,6 +3,7 @@
 #include "DataAsset/PrimaryDataAsset_Clue.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Engine/NetSerialization.h"
+#include "Net/Serialization/FastArraySerializer.h"
 #include "UObject/Class.h"
 #include "ClueFastArray.generated.h"
 
@@ -34,6 +35,7 @@ struct FReplicatedClueItem : public FFastArraySerializerItem
 	void PreReplicatedRemove(const struct FReplicatedAreaClueArray& InArraySerializer);
 	void PostReplicatedAdd(const struct FReplicatedAreaClueArray& InArraySerializer);
 	void PostReplicatedChange(const struct FReplicatedAreaClueArray& InArraySerializer);
+
 	
 	bool operator==(const FReplicatedClueItem& Other) const
 	{
@@ -46,15 +48,22 @@ struct FReplicatedClueItem : public FFastArraySerializerItem
 	}
 };
  
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnClueAddReplicated, const FReplicatedClueItem&, ClueItem);
+
 /** Step 2: You MUST wrap your TArray in another struct that inherits from FFastArraySerializer */
 USTRUCT(BlueprintType)
 struct FReplicatedAreaClueArray: public FFastArraySerializer
 {
 	GENERATED_BODY()
- 
+
+	
 	UPROPERTY(VisibleAnywhere)
 	TArray<FReplicatedClueItem>	Items;	/** Step 3: You MUST have a TArray named Items of the struct you made in step 1. */
- 
+
+	UPROPERTY(BlueprintAssignable, Category="Clue System")
+	FOnClueAddReplicated OnClueAddReplicated;
+	
 	/** Step 4: Copy this, replace example with your names */
 	bool NetDeltaSerialize(FNetDeltaSerializeInfo & DeltaParams)
 	{

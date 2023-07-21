@@ -4,6 +4,7 @@
 #include "Components/PlayerClueManagerComponent.h"
 
 #include "ClueSystem.h"
+#include "Engine/StreamableManager.h"
 #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Interfaces/PlayerClueInterface.h"
 #include "Subsystems/ClueManagerSubsystem.h"
@@ -70,17 +71,82 @@ bool UPlayerClueManagerComponent::CollectClueLocally(UPrimaryDataAsset_Clue* Clu
 
 bool UPlayerClueManagerComponent::HasCollectedClue(UPrimaryDataAsset_Clue* Clue)
 {
-	// Check if the clue is in the fast array
-	if(CollectedClues.Contains(Clue->GetClueLocation()))
+	if(!IsValid(Clue))
 	{
-		const int ClueIndex = *CollectedClues.Find(Clue->GetClueLocation());
+		UE_LOG(LogClue, Error, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is not Valid"));
+		return false;
+	}
+	
+	UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: " + Clue->GetClueName()));
+	// Check if the clue is in the fast array
+	if(ReplicatedClues.Items.ContainsByPredicate([&](const FReplicatedClueItem& Item){return Item.AreaName == Clue->GetClueLocation();}))
+	{
+		UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is in Fast Array"));
+		const int ClueIndex = ReplicatedClues.Items.IndexOfByPredicate([&](const FReplicatedClueItem& Item){return Item.AreaName == Clue->GetClueLocation();});
+		
 		if(ReplicatedClues.Items[ClueIndex].AreaName == Clue->GetClueLocation() && ReplicatedClues.Items[ClueIndex].CollectedClues.Contains(Clue))
 		{
+			UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is in Fast Array and is the same as the Clue Location"));
 			return true;
 		}
+		else
+		{
+			if(ReplicatedClues.Items[ClueIndex].AreaName == Clue->GetClueLocation())
+			{
+				UE_LOG(LogClue, Warning, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is in Fast Array but is not the same as the Clue Location"));
+			}
+			else
+			{
+				UE_LOG(LogClue, Warning, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is in Fast Array but is not the same as the Clue Location"));
+			}
+		}
 	}
-
+	UE_LOG(LogClue, Error, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "HasCollectedClue: Clue is not in Fast Array"));
 	return false;
+}
+
+void UPlayerClueManagerComponent::OnClueAddReplicated(const FReplicatedClueItem& ClueItem)
+{
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "OnClueAddReplicated");
+	if(!IsValid(GetLocalPlayerFromOwner())) return;
+
+	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "GetLocalPlayerFromOwner is Valid");
+	
+	UObject* clue = ClueItem.CollectedClues[ClueItem.CollectedClues.Num() - 1].Get();
+	if(!ClueItem.CollectedClues[ClueItem.CollectedClues.Num() - 1].IsValid())
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is not Valid");
+		FStreamableManager StreamableManager;
+		clue = StreamableManager.LoadSynchronous(ClueItem.CollectedClues[ClueItem.CollectedClues.Num() - 1].Get());
+
+		
+	}
+	if(IsValid(clue))
+    {
+    	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is Valid");
+    }
+    else
+    {
+    	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is not Valid");
+    	return;
+    }
+	
+	if(clue->IsA(UPrimaryDataAsset_Clue::StaticClass()))
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is a subclass of PrimaryDataAsset_Clue");
+	}
+	else
+	{
+		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is not a PrimaryDataAsset_Clue");
+		return;
+	}
+	
+	UClueManagerSubsystem* ClueManagerSubsystem = GetLocalPlayerFromOwner()->GetSubsystem<UClueManagerSubsystem>();
+
+	
+	
+	ClueManagerSubsystem->OnCollectedClue.Broadcast(Cast<UPrimaryDataAsset_Clue>(clue));
+	
 }
 
 
@@ -91,9 +157,8 @@ void UPlayerClueManagerComponent::BeginPlay()
 
 	// ...
 
-	Client_SetupClueSubsystem();
+	// Client_SetupClueSubsystem();
 	Server_SetupClueManager();
-	
 }
 
 void UPlayerClueManagerComponent::OnGlobalClueCollected(UPrimaryDataAsset_Clue* Clue)
@@ -108,6 +173,7 @@ void UPlayerClueManagerComponent::OnGlobalClueCollected(UPrimaryDataAsset_Clue* 
 	{
 		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue ["+ Clue->GetClueName() + "] at Location ["+ Clue->GetClueLocation() +"] was not Collected Locally");
 	}
+	
 }
 
 void UPlayerClueManagerComponent::Server_SetupClueManager_Implementation()
@@ -145,12 +211,20 @@ void UPlayerClueManagerComponent::Client_SetupClueSubsystem_Implementation()
 	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Setting up Clue Subsystem");
 
 	// Get the Local Player and the Clue Manager Subsystem
-	if(!IsValid(GetLocalPlayerFromOwner())) return;
+	if(!IsValid(GetLocalPlayerFromOwner()))
+	{
+		UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Local Player is Invalid"));
+		return;
+	}
+
+	UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Local Player is Valid"));
 	
 	UClueManagerSubsystem* ClueManagerSubsystem = GetLocalPlayerFromOwner()->GetSubsystem<UClueManagerSubsystem>();
 	if(IsValid(ClueManagerSubsystem))
 	{
+		UE_LOG(LogClue, Display, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Clue Manager Subsystem is Valid"));
 		ClueManagerSubsystem->SetPlayerClueManagerComponent(this);
+		ReplicatedClues.OnClueAddReplicated.AddUniqueDynamic(this, &UPlayerClueManagerComponent::OnClueAddReplicated);
 	}
 	else
 	{

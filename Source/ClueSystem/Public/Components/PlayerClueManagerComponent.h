@@ -36,6 +36,8 @@ public:
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue Management")
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* Clue);
+	UFUNCTION()
+	void OnClueAddReplicated(const FReplicatedClueItem& ClueItem);
 
 	UPROPERTY(BlueprintAssignable, Category="Clue Manager|Events")
 	FOnCollectedClue OnCollectedClueLocally;
@@ -69,7 +71,7 @@ protected:
 	FReplicatedAreaClueArray ReplicatedClues;
 
 
-	UFUNCTION(Client, Reliable, Category="Clue Management")
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category="Clue Management")
 	void Client_SetupClueSubsystem();
 
 	UFUNCTION(Server,Reliable, Category="Clue Management")
