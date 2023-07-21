@@ -3,7 +3,7 @@
 
 #include "Widgets/Slots/ClueSlot.h"
 #include "Engine/Texture2D.h"
-#include "FunctionLibrary/MainDebugFunctionLibrary.h"
+#include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
 void UClueSlot::NativeConstruct()
@@ -12,7 +12,7 @@ void UClueSlot::NativeConstruct()
 
 	Button_ViewClue->OnPressed.AddUniqueDynamic(this, &UClueSlot::ViewClue);
 
-	if(UClueManagerSubsystem* ClueManagerSubsystem = GetGameInstance()->GetSubsystem<UClueManagerSubsystem>())
+	if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
 	{
 		ClueManagerSubsystem->OnCollectedClue.AddUniqueDynamic(this, &UClueSlot::UpdateSlot);
 	}
@@ -20,11 +20,15 @@ void UClueSlot::NativeConstruct()
 
 void UClueSlot::UpdateSlot(UPrimaryDataAsset_Clue* Clue)
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Updating Slot ["+FString::FromInt(GetNodeID()) +"]", EDebuggingType::DT_Log);
+	UDebugFunctionLibrary::DebugLogWithObject(this, "Updating Slot ["+FString::FromInt(GetNodeID()) +"]");
 	
-	if(!Clue || Clue->GetClueIndex() != GetNodeID()) return;
+	if(!IsValid(Clue) || Clue->GetClueIndex() != GetNodeID())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Clue is invalid or [%d] does not match Slot Index [%d]"), Clue->GetClueIndex(), GetNodeID());
+		return;
+	}
 	
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset With Index ["+ FString::FromInt(Clue->GetClueIndex()) +"] is Valid", EDebuggingType::DT_Log);
+	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data Asset [" +Clue->GetClueName()+"] With Index ["+ FString::FromInt(Clue->GetClueIndex()) +"] is Valid");
 
 	TextBlock_ClueName->SetText(FText::FromString(Clue->GetClueName()));
 
@@ -35,7 +39,7 @@ void UClueSlot::UpdateSlot(UPrimaryDataAsset_Clue* Clue)
 
 void UClueSlot::ViewClue()
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Attempting to View Clue [" +FString::FromInt(GetNodeID())+"]", EDebuggingType::DT_Log);
+	UDebugFunctionLibrary::DebugLogWithObject(this, "Attempting to View Clue [" +FString::FromInt(GetNodeID())+"]");
 
 	// Async Load Data Asset
 	if(ClueData.IsValid())
@@ -47,12 +51,21 @@ void UClueSlot::ViewClue()
 
 void UClueSlot::OnDataLoaded()
 {
-	UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Loaded", EDebuggingType::DT_Log);
-	if(ClueData.Get() && GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
+	UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Loaded");
+	if(ClueData.Get() && GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->HasCollectedClue(ClueData.Get()))
 	{
-		
-		UMainDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid", EDebuggingType::DT_Log);
-		GetGameInstance()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
-		
+		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid");
+		GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>()->OnClueSelected.Broadcast(ClueData.Get());
+	}
+	else
+	{
+		if(!ClueData.Get())
+		{
+			UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Invalid");
+		}
+		else
+		{
+			UDebugFunctionLibrary::DebugLogWithObject(this, "Clue Data is Valid but not Collected");
+		}
 	}
 }

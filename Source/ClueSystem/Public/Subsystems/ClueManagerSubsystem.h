@@ -5,8 +5,7 @@
 #include "CoreMinimal.h"
 #include "Libraries/ClueStructLibrary.h"
 #include "Libraries/EventDelegateLibrary.h"
-
-#include "Subsystems/GameInstanceSubsystem.h"
+#include "Subsystems/LocalPlayerSubsystem.h"
 #include "ClueManagerSubsystem.generated.h"
 
 /**
