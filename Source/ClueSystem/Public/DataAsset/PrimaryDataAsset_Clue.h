@@ -24,6 +24,8 @@ public:
 
 	UPrimaryDataAsset_Clue();
 
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
 	UFUNCTION(BlueprintCallable, Category="Clue System|Inspecting")
 	virtual bool ViewClue(UWidgetSwitcher* ClueSwitcherSlot);
 

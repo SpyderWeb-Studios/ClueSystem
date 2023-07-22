@@ -8,6 +8,11 @@
 #include "Subsystems/ClueManagerSubsystem.h"
 
 
+FPrimaryAssetId UPrimaryDataAsset_ClueConfig::GetPrimaryAssetId() const
+{
+	return FPrimaryAssetId("ClueConfigData", GetFName());
+}
+
 void UPrimaryDataAsset_ClueConfig::UpdateClueIndices(FString Location)
 {
 	ClueLocation = Location;

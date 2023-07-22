@@ -10,6 +10,11 @@ UPrimaryDataAsset_Clue::UPrimaryDataAsset_Clue()
 {
 }
 
+FPrimaryAssetId UPrimaryDataAsset_Clue::GetPrimaryAssetId() const
+{
+	return FPrimaryAssetId("ClueData", GetFName());
+}
+
 bool UPrimaryDataAsset_Clue::StopViewingClue_Implementation(UWidgetSwitcher* ClueSwitcherSlot)
 {
 	// Log a warning that this function has not been implemented.

@@ -20,6 +20,8 @@ class CLUESYSTEM_API UPrimaryDataAsset_ClueConfig : public UPrimaryDataAsset
 
 public:
 
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
 	UFUNCTION(BlueprintPure, Category = "ClueSystem|ClueBranchManager")
 	FString GetClueLocation() const { return ClueLocation; }
 
