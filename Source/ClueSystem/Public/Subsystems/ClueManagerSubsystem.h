@@ -27,7 +27,7 @@ public:
 
 	void Cleanup();
 
-	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Manager")
+	UFUNCTION(BlueprintCosmetic, BlueprintCallable, Category="Clue System|Clue Manager")
 	void SelectClue(UPrimaryDataAsset_Clue* clue);
 	
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueDataAsset);

@@ -46,7 +46,7 @@ public:
 	 * @brief Sets up the Inspector to render the Clue Data Asset passed in
 	 * @param ClueDataAsset The Data Asset to Render. Will fail if the Data Asset is not a Mesh Type
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Clue System|Inspector")
+	UFUNCTION(BlueprintCosmetic, BlueprintCallable, Category = "Clue System|Inspector")
 		void InspectClue(UPrimaryDataAsset_Clue* ClueDataAsset);
 
 	/**
@@ -54,7 +54,7 @@ public:
 	 * will render the Mesh type Clue Data Asset
 	 * @param ClueDataAsset The Data Asset to Render
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Clue System|Inspector")
+	UFUNCTION(BlueprintCosmetic, BlueprintCallable, Category = "Clue System|Inspector")
     	void InspectClueMesh(UClueTypeMesh* ClueDataAsset);
 	
 protected:
