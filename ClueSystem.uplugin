@@ -25,6 +25,11 @@
       "Name": "TamperSystem",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "TamperSystemEditor",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
     }
   ]
 }

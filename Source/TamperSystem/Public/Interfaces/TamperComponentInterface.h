@@ -25,6 +25,6 @@ class TAMPERSYSTEM_API ITamperComponentInterface
 public:
 
 	// Function to get the Tamper Component
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper System|Interface|Component")
 	UTamperComponent* GetTamperComponent();
 };

@@ -23,16 +23,19 @@ class TAMPERSYSTEM_API ITamperInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tamper")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tamper System|Interface|Main")
 	bool CanBeTamperedWith();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper System|Interface|Main")
 	bool CanBeTamperedWithBy(UObject* Object);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper System|Interface|Main")
 	bool IsTamperValid(UObject* Object);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper System|Interface|Main")
 	bool AttemptApplyTamper(UObject* Object);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tamper System|Interface|Main")
+	bool AttemptRemoveTamper(UObject* Object);
 	
 };

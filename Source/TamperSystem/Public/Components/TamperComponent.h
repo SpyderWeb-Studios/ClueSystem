@@ -8,7 +8,8 @@
 #include "TamperComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Tamper), meta=(BlueprintSpawnableComponent) )
+class UTamperObject;
+UCLASS( ClassGroup=("Tamper System"), meta=(BlueprintSpawnableComponent) )
 class TAMPERSYSTEM_API UTamperComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -17,7 +18,7 @@ public:
 	// Sets default values for this component's properties
 	UTamperComponent();
 
-	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Tamper")
-	bool AttemptTamper(UObject* Object);
+	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, BlueprintCallable, Category = "Tamper System|Component")
+	bool AttemptTamper(TSubclassOf<UTamperObject> TamperClass, UObject* TamperTarget);
 			
 };
