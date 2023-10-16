@@ -34,8 +34,9 @@ public:
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue Management")
 	bool CollectClueLocally(UPrimaryDataAsset_Clue* Clue);
 
-	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category="Clue Management")
+	UFUNCTION(BlueprintCallable, Category="Clue Management")
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* Clue);
+	
 	UFUNCTION()
 	void OnClueAddReplicated(const FReplicatedClueItem& ClueItem);
 

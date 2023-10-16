@@ -49,8 +49,31 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 	}
 	
 	// Simply Set the Clue Description from the Clue Information
-	TextBlock_ClueDescription->SetText(FText::FromString(CollectedClue->GetClueInformation()));
+	UpdateClueDescription(FText::FromString(CollectedClue->GetClueInformation()));
 
+	UpdateClueSections(CollectedClue);
+
+	
+}
+
+void UClueViewer::ResetViewer()
+{
+	if(IsValid(VerticalBox_ClueSections))
+	{		
+		VerticalBox_ClueSections->ClearChildren();
+	}
+	if(IsValid(TextBlock_ClueDescription))
+	{
+		TextBlock_ClueDescription->SetText(FText());
+	}
+}
+
+void UClueViewer::UpdateClueSections_Implementation(UPrimaryDataAsset_Clue* CollectedClue)
+{
+	if(!IsValid(CollectedClue)) return;
+
+	if(!IsValid(VerticalBox_ClueSections)) return;
+	
 	// Get rid of the previously selected Clue's Additional Information
 	VerticalBox_ClueSections->ClearChildren();
 	
@@ -88,8 +111,9 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 	}
 }
 
-void UClueViewer::ResetViewer()
+void UClueViewer::UpdateClueDescription_Implementation(const FText& ClueDescription)
 {
-	VerticalBox_ClueSections->ClearChildren();
-	TextBlock_ClueDescription->SetText(FText());
+	if(!IsValid(TextBlock_ClueDescription)) return;
+	
+	TextBlock_ClueDescription->SetText(ClueDescription);
 }

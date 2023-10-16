@@ -10,8 +10,12 @@ void UClueSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	Button_ViewClue->OnPressed.AddUniqueDynamic(this, &UClueSlot::ViewClue);
+	if(IsValid(Button_ViewClue))
+	{
+		Button_ViewClue->OnPressed.AddUniqueDynamic(this, &UClueSlot::ViewClue);
+	}
 
+	
 	if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
 	{
 		ClueManagerSubsystem->OnCollectedClue.AddUniqueDynamic(this, &UClueSlot::UpdateSlot);

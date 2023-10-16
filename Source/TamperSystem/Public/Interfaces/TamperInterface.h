@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "TamperInterface.generated.h"
 
+class UTamperObject;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UTamperInterface : public UInterface
@@ -37,5 +38,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tamper System|Interface|Main")
 	bool AttemptRemoveTamper(UObject* Object);
-	
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Tamper System|Interface|Main")
+	bool RegisterTamperObject(UTamperObject* Object);
 };

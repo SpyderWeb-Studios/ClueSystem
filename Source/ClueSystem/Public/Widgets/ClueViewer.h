@@ -31,19 +31,26 @@ virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable, Category="Clue System|Viewer")	
 	void ResetViewer();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Clue System|Viewer")
+	void UpdateClueDescription(const FText& ClueDescription);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Clue System|Viewer")
+	void UpdateClueSections(UPrimaryDataAsset_Clue* CollectedClue);
+	
 	
 protected:
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System|Viewer")
 	TObjectPtr<UWidgetSwitcher> ClueViewerSwitcher;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System|Viewer")
 	TObjectPtr<UPanelWidget> ClueViewerPanel;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System|Viewer")
 	UTextBlock* TextBlock_ClueDescription;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System|Viewer")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System|Viewer")
 	UVerticalBox* VerticalBox_ClueSections;
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Clue System|Viewer")

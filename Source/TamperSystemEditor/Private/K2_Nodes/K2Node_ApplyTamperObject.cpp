@@ -7,6 +7,7 @@
 #include "KismetCompilerMisc.h"
 #include "KismetCompiler.h"
 #include "EdGraphSchema_K2.h"
+#include "FunctionLibraries/TamperBlueprintFunctionLibrary.h"
 #include "GameFramework/TamperObject.h"
 #include "UObject/ObjectSaveContext.h"
 
@@ -139,7 +140,7 @@ void UK2Node_ApplyTamperObject::ExpandNode(FKismetCompilerContext& CompilerConte
 	
 	// Create the CreateTamper node.
 	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-	//CallCreateNode->FunctionReference.SetExternalMember(GET_FUNCTION_NAME_CHECKED(UTamperFunctionLibrary, CreateTamperObject), UTamperFunctionLibrary::StaticClass());
+	CallCreateNode->FunctionReference.SetExternalMember(GET_FUNCTION_NAME_CHECKED(UTamperBlueprintFunctionLibrary, AddTamper), UTamperBlueprintFunctionLibrary::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
 	// Create Node: Input pins
@@ -159,24 +160,24 @@ void UK2Node_ApplyTamperObject::ExpandNode(FKismetCompilerContext& CompilerConte
 	
 
 	// Create the RegisterTamper node.
-	UK2Node_CallFunction* CallRegisterNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-	//CallRegisterNode->FunctionReference.SetExternalMember(GET_FUNCTION_NAME_CHECKED(UTamperFunctionLibrary, RegisterTamperObject), UTamperFunctionLibrary::StaticClass());
-	CallRegisterNode->AllocateDefaultPins();
+	// UK2Node_CallFunction* CallRegisterNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
+	// CallRegisterNode->FunctionReference.SetExternalMember(GET_FUNCTION_NAME_CHECKED(UTamperBlueprintFunctionLibrary, RegisterTamperObject), UTamperBlueprintFunctionLibrary::StaticClass());
+	// CallRegisterNode->AllocateDefaultPins();
 	
 	// Register Node: Input pins
-	UEdGraphPin* RegisterNode_ExecPin = CallRegisterNode->GetExecPin();
-	UEdGraphPin* RegisterNode_TamperPin = CallRegisterNode->FindPin(TAMPERCLASSPIN);
+	// UEdGraphPin* RegisterNode_ExecPin = CallRegisterNode->GetExecPin();
+	// UEdGraphPin* RegisterNode_TamperPin = CallRegisterNode->FindPin(TAMPERCLASSPIN);
 	
 	// Register Node: Output pins
-	UEdGraphPin* RegisterNode_ThenPin = CallRegisterNode->GetThenPin();
-	UEdGraphPin* RegisterNode_ResultPin = CallRegisterNode->GetReturnValuePin();
-	RegisterNode_ResultPin->PinType = ThisNode_ResultPin->PinType;
+	// UEdGraphPin* RegisterNode_ThenPin = CallRegisterNode->GetThenPin();
+	// UEdGraphPin* RegisterNode_ResultPin = CallRegisterNode->GetReturnValuePin();
+	// RegisterNode_ResultPin->PinType = ThisNode_ResultPin->PinType;
 
 	/*
 	 * Wire the pins
 	 */
-	AssigmentNodes_ThenPin->MakeLinkTo(RegisterNode_ExecPin);
-	CreateNode_ResultPin->MakeLinkTo(RegisterNode_TamperPin);
+	// AssigmentNodes_ThenPin->MakeLinkTo(RegisterNode_ExecPin);
+	// CreateNode_ResultPin->MakeLinkTo(RegisterNode_TamperPin);
 
 	/*
 	 * Move the wiring outside and expand the node
@@ -186,8 +187,8 @@ void UK2Node_ApplyTamperObject::ExpandNode(FKismetCompilerContext& CompilerConte
 	CompilerContext.MovePinLinksToIntermediate(*ThisNode_ClassPin, *CreateNode_ClassPin);
 	CompilerContext.MovePinLinksToIntermediate(*ThisNode_TamperSystemPin, *CreateNode_TamperSystemPin);
 
-	CompilerContext.MovePinLinksToIntermediate(*ThisNode_ThenPin, *RegisterNode_ThenPin);
-	CompilerContext.MovePinLinksToIntermediate(*ThisNode_ResultPin, *RegisterNode_ResultPin);
+	// CompilerContext.MovePinLinksToIntermediate(*ThisNode_ThenPin, *RegisterNode_ThenPin);
+	// CompilerContext.MovePinLinksToIntermediate(*ThisNode_ResultPin, *RegisterNode_ResultPin);
 	
 	// Break all internal pins, so we can clean up?
 	BreakAllNodeLinks();

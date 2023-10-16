@@ -25,10 +25,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Clue System|Clue Slot")
 	void UpdateSlot(UPrimaryDataAsset_Clue* Clue);
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System")
 	TObjectPtr<UTextBlock> TextBlock_ClueName;
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidget), Category="Clue System")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System")
 	TObjectPtr<UButton> Button_ViewClue;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta=(BindWidgetOptional), Category="Clue System")

@@ -29,7 +29,8 @@ public:
 
 	UFUNCTION(BlueprintCosmetic, BlueprintCallable, Category="Clue System|Clue Manager")
 	void SelectClue(UPrimaryDataAsset_Clue* clue);
-	
+
+	UFUNCTION(BlueprintPure, Category="Clue System|Clue Manager")
 	bool HasCollectedClue(UPrimaryDataAsset_Clue* ClueDataAsset);
 
 #pragma region Events

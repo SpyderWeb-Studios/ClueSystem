@@ -30,4 +30,10 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="Clue System UI")
     bool UpdateClueViewer(const UPrimaryDataAsset_Clue* Clue);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Clue System UI")
+	bool UpdateClueDescription(const FText& ClueDescription);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Clue System UI")
+	bool UpdateClueSections(const UPrimaryDataAsset_Clue* Clue);
 };
