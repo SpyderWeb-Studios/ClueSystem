@@ -29,7 +29,8 @@ public class ClueSystem : ModuleRules
 				"UMG",
 				"Helper",
 				"NetCore",
-				"GenericTreeStructure"
+			//	"GenericTreeStructure",
+			//	"StructUtils"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

@@ -10,6 +10,7 @@ public class GenericTreeStructure : ModuleRules
             new string[]
             {
                 "Core",
+                "StructUtils"
             }
         );
 

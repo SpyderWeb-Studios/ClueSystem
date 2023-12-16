@@ -25,11 +25,6 @@
       "Name": "TamperSystem",
       "Type": "Runtime",
       "LoadingPhase": "Default"
-    },
-    {
-      "Name": "GenericTreeStructure",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
     }
   ]
 }

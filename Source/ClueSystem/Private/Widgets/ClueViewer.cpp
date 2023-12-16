@@ -4,7 +4,7 @@
 #include "Widgets/ClueViewer.h"
 
 #include "Blueprint/WidgetLayoutLibrary.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "Subsystems/ClueManagerSubsystem.h"
 
 
@@ -22,7 +22,7 @@ void UClueViewer::OnClueSelected(UPrimaryDataAsset_Clue* CollectedClue)
 {
 	if(!CollectedClue) return;
 	
-	UDebugFunctionLibrary::DebugLogWithObject(this, "Received Clue to View: " +CollectedClue->GetClueName());
+// 	UDebugFunctionLibrary::DebugLogWithObject(this, "Received Clue to View: " +CollectedClue->GetClueName());
 
 	/* Display the Description and what it means from Data Asset
 	 * - Base Description
@@ -80,7 +80,7 @@ void UClueViewer::UpdateClueSections_Implementation(UPrimaryDataAsset_Clue* Coll
 	// Check if the Clue has any Additional Information
 	if(CollectedClue->GetAdditionalInformation().Num() > 0)
 	{
-		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue has additional information: " +CollectedClue->GetClueName());
+//		UDebugFunctionLibrary::DebugLogWithObject(this, "Clue has additional information: " +CollectedClue->GetClueName());
 
 		// Get the Clue Manager Subsystem
 		if(UClueManagerSubsystem* ClueManagerSubsystem = GetOwningLocalPlayer()->GetSubsystem<UClueManagerSubsystem>())
@@ -94,8 +94,8 @@ void UClueViewer::UpdateClueSections_Implementation(UPrimaryDataAsset_Clue* Coll
 				// Check to see if the Clue Manager has registered the Player as having Collected the Clue
 				const bool result = ClueManagerSubsystem->HasCollectedClue(Information.ClueDataAsset);
 				
-				UDebugFunctionLibrary::DebugLogWithObject(this, Information.ClueDataAsset->GetClueName() + " Reveals: "
-					+ (result ? Information.Information : " Not In Clue Manager"));
+// 				UDebugFunctionLibrary::DebugLogWithObject(this, Information.ClueDataAsset->GetClueName() + " Reveals: "
+//					+ (result ? Information.Information : " Not In Clue Manager"));
 
 				// Create a Description Slot
 				// It is defaulted to "???" to convey to the player that there is more information to gather based on another Clue

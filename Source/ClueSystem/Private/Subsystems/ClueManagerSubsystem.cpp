@@ -5,7 +5,7 @@
 
 #include "ClueSystem.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 
 
 UClueManagerSubsystem::UClueManagerSubsystem()
@@ -33,10 +33,10 @@ void UClueManagerSubsystem::Cleanup()
 
 void UClueManagerSubsystem::SelectClue(UPrimaryDataAsset_Clue* clue)
 {
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "SelectClue called");
+// 	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "SelectClue called");
 	if(IsValid(clue))
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is valid, broadcasting OnClueSelected");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue is valid, broadcasting OnClueSelected");
 		OnClueSelected.Broadcast(clue);
 	}
 }

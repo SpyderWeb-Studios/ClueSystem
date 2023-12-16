@@ -6,7 +6,7 @@
 #include "ClueSystem.h"
 #include "Components/ClueManagerComponent.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "GameFramework/ClueBase.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -18,14 +18,14 @@ bool AClueBranchBrush::RegisterCluesInRange()
 	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(this);
 	if(!IsValid(GameMode))
 	{
-		UE_LOG(LogClue, Error, TEXT("%S"), *UDebugFunctionLibrary::FormatDebug(this, "Game Mode is Invalid"));
+/// 		UE_LOG(LogClue, Error, TEXT("%S"), *UDebugFunctionLibrary::FormatDebug(this, "Game Mode is Invalid"));
 		return false;
 	}
 	
 	UActorComponent* ClueManager = GameMode->GetComponentByClass(UClueManagerComponent::StaticClass());
 	if(!IsValid(ClueManager))
 	{
-		UE_LOG(LogClue, Error, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Clue Manager Component is Invalid"));
+//		UE_LOG(LogClue, Error, TEXT("%s"), *UDebugFunctionLibrary::FormatDebug(this, "Clue Manager Component is Invalid"));
 		return false;
 	}	
 

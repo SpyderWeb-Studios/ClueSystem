@@ -14,3 +14,5 @@ void FGenericTreeStructureModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
     
 IMPLEMENT_MODULE(FGenericTreeStructureModule, GenericTreeStructure)
+
+DEFINE_LOG_CATEGORY(LogGenericTree)

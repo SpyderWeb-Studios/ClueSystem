@@ -5,7 +5,7 @@
 #include "ClueSystem.h"
 #include "Components/ClueManagerComponent.h"
 #include "Engine/StreamableManager.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/ClueManagerSubsystem.h"
@@ -38,17 +38,17 @@ bool AClueBase::AttemptInteractionWithClueManager(UPlayerClueManagerComponent* C
 {
 	if(GetNetMode() >= NM_Client)
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "AttemptInteractionWithClueManager called on Client");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "AttemptInteractionWithClueManager called on Client");
 		return false;
 	}
 
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Interacting");
+//	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Interacting");
 	
 	TWeakObjectPtr<UPrimaryDataAsset_Clue> clue =  ClueDataAsset.LoadSynchronous();
 
 	if(clue.IsValid() && IsValid(ClueManager))
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Collected");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Collected");
 		if(ClueManager->CollectClueLocally(clue.Get()))
 		{
 			return true;

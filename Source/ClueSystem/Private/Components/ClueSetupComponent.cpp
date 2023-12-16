@@ -4,7 +4,7 @@
 #include "Components/ClueSetupComponent.h"
 
 #include "Components/ClueManagerComponent.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/ClueManagerSubsystem.h"
@@ -26,15 +26,15 @@ void UClueSetupComponent::BeginPlay()
 
 	if(GetOwner()->HasAuthority())
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Setup");
 
 		// Get the Game Mode and find the Clue Manager Component
 		if(const AGameModeBase* gameMode = UGameplayStatics::GetGameMode(GetWorld()))
 		{
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
 			if(UClueManagerComponent* manager = gameMode->FindComponentByClass<UClueManagerComponent>())
 			{
-				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+//				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
 				manager->SetClueConfigRoot(ClueConfig.Get());
 			}
 		}
@@ -45,15 +45,15 @@ void UClueSetupComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if(GetOwner()->HasAuthority())
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue End Play");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue End Play");
 
 		// Get the Game Mode and find the Clue Manager Component
 		if(const AGameModeBase* gameMode = UGameplayStatics::GetGameMode(GetWorld()))
 		{
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Game Mode Valid");
 			if(UClueManagerComponent* manager = gameMode->FindComponentByClass<UClueManagerComponent>())
 			{
-				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
+//				UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Manager Valid");
 				manager->Cleanup();
 			}
 		}

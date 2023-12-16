@@ -5,7 +5,7 @@
 
 #include "ClueSystem.h"
 #include "DataAsset/PrimaryDataAsset_ClueConfig.h"
-#include "FunctionLibrary/DebugFunctionLibrary.h"
+// #include "FunctionLibrary/DebugFunctionLibrary.h"
 
 
 
@@ -23,11 +23,11 @@ void UClueManagerComponent::Cleanup()
 
 bool UClueManagerComponent::CollectClue(UPrimaryDataAsset_Clue* Clue)
 {
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Attempting to Collect Clue");
+//	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Attempting to Collect Clue");
 	
 	if(!IsValid(Clue)) return false;
 	
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Collecting Clue: " +Clue->GetClueName());
+//	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Collecting Clue: " +Clue->GetClueName());
 	FAreaClues AreaClues;
 	
 	// If the Map has the Enum already, then we need to save a reference to the current value
@@ -36,18 +36,18 @@ bool UClueManagerComponent::CollectClue(UPrimaryDataAsset_Clue* Clue)
 	// If the Map has the Enum already, then we need to save a reference to the current value
 		AreaClues = CollectedClues[Clue->GetClueLocation()];
 		
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Location already in Map");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Location already in Map");
 	}
 
 	// If it already exists then Return False
 	if(AreaClues.CollectedClues.Contains(Clue)) return false;
 
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue doesn't already exist in Map" +Clue->GetClueName());
+//	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue doesn't already exist in Map" +Clue->GetClueName());
 	
 	AreaClues.CollectedClues.Add(Clue, true);
 	CollectedClues.Add(Clue->GetClueLocation(), AreaClues);
 	
-	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Added" +Clue->GetClueName());
+///	UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clue Successfully Added" +Clue->GetClueName());
 
 	OnCollectedClue.Broadcast(Clue);
 	
@@ -66,9 +66,9 @@ void UClueManagerComponent::SetClueConfigRoot(UPrimaryDataAsset_ClueConfig* Root
 	// Iterate through the Map and Log the Tree
 	for(const auto& node : ClueConfigTree)
 	{
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Node: ["+FString::FromInt(node.Key)+"] with Name: ["+node.Value.NodeName+"]");
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branches: ["+ FString::FromInt(node.Value.ChildrenNodes.Num())+"]");
-		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clues: ["+FString::FromInt(node.Value.Clues.Num())+"])");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Node: ["+FString::FromInt(node.Key)+"] with Name: ["+node.Value.NodeName+"]");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branches: ["+ FString::FromInt(node.Value.ChildrenNodes.Num())+"]");
+//		UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Clues: ["+FString::FromInt(node.Value.Clues.Num())+"])");
 	}
 
 	OnClueTrueCreated.Broadcast(FClueTree(ClueConfigTree));
@@ -153,14 +153,14 @@ void UClueManagerComponent::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		if(!IsValid(child))
 		{
 			// log error
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Clue is not valid");
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Clue is not valid");
 			continue;
 		}
 		
 		if(child->GetClueIndex() > 0 && Tree.Contains(child->GetClueIndex()))
 		{
 			// Log Warning
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, FString::Printf(TEXT("Clue [%s] already exists in Tree. Clue Index: [%d]"), *child->GetClueName(), child->GetClueIndex()));
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this, FString::Printf(TEXT("Clue [%s] already exists in Tree. Clue Index: [%d]"), *child->GetClueName(), child->GetClueIndex()));
 		}
 		
 		FClueTreeNode ChildNode = FClueTreeNode(Tree.Num());
@@ -178,13 +178,13 @@ void UClueManagerComponent::CreateTreeRecursively(UPrimaryDataAsset_ClueConfig* 
 		if(!IsValid(child))
 		{
 			// log error
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branch is not valid");
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this, "Branch is not valid");
 			continue;
 		}
 		if(child->GetIndex() > 0 && Tree.Contains(child->GetIndex()))
 		{
 			// Log Warning
-			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Branch ["+child->GetClueLocation()+"] already exists in Tree. Branch Index: ["+FString::FromInt(child->GetIndex())+"]");
+//			UDebugFunctionLibrary::DebugLogWithObjectContext(this,"Branch ["+child->GetClueLocation()+"] already exists in Tree. Branch Index: ["+FString::FromInt(child->GetIndex())+"]");
 			
 			continue;
 		}
