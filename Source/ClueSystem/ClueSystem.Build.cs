@@ -27,7 +27,6 @@ public class ClueSystem : ModuleRules
 			{
 				"Core",
 				"UMG",
-				"Helper",
 				"NetCore",
 			//	"GenericTreeStructure",
 			//	"StructUtils"
